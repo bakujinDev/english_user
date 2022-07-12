@@ -1,0 +1,4 @@
+<svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+<line className="stroke" x1="0.360493" y1="-0.360493" x2="12.2707" y2="-0.360493" transform="matrix(-0.687157 0.726509 -0.687157 -0.726509 8.6796 0.199219)"  stroke-width="1.4" stroke-linecap="round"/>
+<line className="stroke" x1="0.360493" y1="-0.360493" x2="12.2707" y2="-0.360493" transform="matrix(-0.687157 -0.726509 0.687157 -0.726509 9.25818 9.375)"  stroke-width="1.4" stroke-linecap="round"/>
+</svg>

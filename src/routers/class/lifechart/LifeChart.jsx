@@ -1,0 +1,216 @@
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import DetailHeader from "../../../components/header/DetailHeader";
+import Chart from "../../../components/class/lifechart/Chart";
+
+export default function LifeChart() {
+  const [postData, setPostData] = useState(
+    new Array(1).fill({ x: "", y: "", memo: "" })
+  );
+  const [chartData, setChartData] = useState(
+    new Array(1).fill({ x: "", y: "" })
+  );
+
+  function onChangeInput(i, type, value) {
+    let _postData = postData;
+    let _chartData = chartData;
+
+    switch (type) {
+      case "age":
+        _postData[i].x = Number(value);
+        _chartData[i].x = Number(value);
+        break;
+
+      case "happiness":
+        _postData[i].y = Number(value);
+        _chartData[i].y = Number(value);
+        break;
+
+      case "memo":
+        _postData[i].memo = value;
+        break;
+
+      default:
+        break;
+    }
+    console.log(i, _chartData);
+
+    setPostData([..._postData]);
+    setChartData([..._chartData]);
+  }
+
+  useEffect(() => {
+    const last = postData.at(-1);
+
+    if (last.x || last.y || last.memo) {
+      console.log(chartData);
+      console.log([...chartData, { x: "", y: "" }]);
+      setPostData([...postData, { x: "", y: "", memo: "" }]);
+      setChartData([...chartData, { x: "", y: "" }]);
+    }
+  }, [postData]);
+
+  return (
+    <>
+      <DetailHeader title="Life Planning" />
+
+      <LifeChartBox>
+        <section className="innerSec">
+          <div className="chartCont">
+            <Chart chartData={[...chartData]} />
+          </div>
+
+          <article className="inputArea">
+            <strong className="title">Plan List</strong>
+
+            <ul className="inputList">
+              {postData.map((v, i) => (
+                <li key={i}>
+                  <div className="opt age">
+                    <p className="key">Age</p>
+
+                    <div className="value">
+                      <input
+                        type={"number"}
+                        value={v.x}
+                        onChange={(e) =>
+                          onChangeInput(i, "age", e.target.value)
+                        }
+                        placeholder="3"
+                      />
+                    </div>
+                  </div>
+
+                  <div className=" opt happiness">
+                    <p className="key">Happiness</p>
+
+                    <div className="value">
+                      <input
+                        type={"number"}
+                        value={v.y}
+                        onChange={(e) =>
+                          onChangeInput(i, "happiness", e.target.value)
+                        }
+                        placeholder="100"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="opt memo">
+                    <p className="key">Memo</p>
+
+                    <div className="value">
+                      <textarea
+                        value={v.memo}
+                        onChange={(e) =>
+                          onChangeInput(i, "memo", e.target.value)
+                        }
+                        placeholder="Back in the day, ..."
+                      />
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </article>
+        </section>
+      </LifeChartBox>
+    </>
+  );
+}
+
+const LifeChartBox = styled.main`
+  height: 100%;
+  padding: 0 20px 20px;
+  overflow-y: scroll;
+
+  .innerSec {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0 0;
+
+    .chartCont {
+      height: 100vw;
+      overflow-x: scroll;
+
+      &::-webkit-scrollbar {
+        height: 8px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        height: 8px;
+        background-color: #999;
+        border-radius: 4px;
+      }
+    }
+
+    .inputArea {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: scroll;
+
+      .title {
+        display: block;
+        margin: 0 auto;
+        font-size: 20px;
+        text-align: center;
+      }
+
+      .inputList {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        li {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+
+          &:nth-of-type(n + 2) {
+            padding: 20px 0 0;
+            border-top: 1px dashed #ccc;
+          }
+
+          .opt {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .key {
+              font-size: 12px;
+              color: #6d7582;
+            }
+
+            .value {
+              display: flex;
+              align-items: center;
+              min-height: 36px;
+              font-weight: 600;
+              border: 2px solid #ddd;
+              border-radius: 8px;
+              overflow: hidden;
+
+              &:focus-within {
+                border-color: #7879f1;
+              }
+
+              input {
+                flex: 1;
+                padding: 0 8px;
+              }
+
+              textarea {
+                flex: 1;
+                padding: 8px;
+                height: 80px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
