@@ -15,14 +15,14 @@ export default function EventListener() {
       .catch((err) => {
         console.error(err);
         localStorage.clear();
-        // window.location.reload();
+        window.location.reload();
       });
   }
 
   useEffect(() => {
     window.scrollTo(0, 0);
     axios.defaults.headers.Authorization = `Bearer ${token}`;
-    // chkToken();
+    chkToken();
   }, [location]);
 
   return <></>;

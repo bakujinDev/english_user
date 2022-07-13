@@ -1,13 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
-import { ToastContainer } from "react-toastify";
 import EventListener from "./components/common/EventListener";
 import GlobalStyle from "./components/common/globalStyle";
 import Auth from "./routers/Auth/Auth";
 import Class from "./routers/class/Class";
 import Main from "./routers/Main";
-import "./util/ReactToastify.css";
-// import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (
@@ -30,18 +27,6 @@ export default function App() {
       <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet"
-      />
-
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
       />
 
       <BrowserRouter>

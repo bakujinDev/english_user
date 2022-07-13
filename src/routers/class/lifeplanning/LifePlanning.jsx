@@ -4,7 +4,6 @@ import DetailHeader from "../../../components/header/DetailHeader";
 import Chart from "../../../components/class/lifechart/Chart";
 import axios from "axios";
 import { API } from "../../../config/api";
-import { toast } from "react-toastify";
 import PopupBg from "../../../components/common/PopupBg";
 import AlertPopup from "../../../components/common/AlertPopup";
 
@@ -57,9 +56,42 @@ export default function LifeChart() {
     setChartData([..._chartData]);
   }
 
+  function chkDuplicateData() {
+    let _duplicateData = postData.filter(
+      (arr, index, callback) =>
+        index !== callback.findIndex((t) => t.x === arr.x)
+    );
+
+    console.log(_duplicateData);
+
+    if (_duplicateData[0]) {
+      setAlertPopup(`${_duplicateData[0].x}살이 중복되어 있습니다.`);
+      throw `${_duplicateData[0].x}살이 중복되어 있습니다.`;
+    }
+  }
+
   function onClickSubmitBtn() {
+    console.log(postData);
+
+    try {
+      chkDuplicateData();
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+
+    let _postData = postData;
+
+    _postData = _postData.filter((e) => {
+      if (e.x !== "" && e.y !== "") return true;
+    });
+
+    _postData = _postData.sort((a, b) => {
+      return a.x - b.x;
+    });
+
     axios
-      .post(API.CLASS_SUBMIT, { class: "lifeplanning", value: postData })
+      .post(API.CLASS_SUBMIT, { class: "lifeplanning", value: _postData })
       .then((res) => {
         console.log(res);
         setAlertPopup("Submit Complete");
@@ -155,8 +187,8 @@ export default function LifeChart() {
 
       {alertPopup && (
         <>
-          <AlertPopup cont={alertPopup} off={setAlertPopup} />
-          <PopupBg bg off={setAlertPopup} />
+          <AlertPopup cont={alertPopup} off={() => setAlertPopup()} />
+          <PopupBg bg off={() => setAlertPopup()} />
         </>
       )}
     </>
