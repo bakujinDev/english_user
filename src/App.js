@@ -6,8 +6,8 @@ import GlobalStyle from "./components/common/globalStyle";
 import Auth from "./routers/Auth/Auth";
 import Class from "./routers/class/Class";
 import Main from "./routers/Main";
-// import "./util/ReactToastify.css";
-import "react-toastify/dist/ReactToastify.css";
+import "./util/ReactToastify.css";
+// import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (

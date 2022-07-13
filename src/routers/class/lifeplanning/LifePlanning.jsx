@@ -5,6 +5,8 @@ import Chart from "../../../components/class/lifechart/Chart";
 import axios from "axios";
 import { API } from "../../../config/api";
 import { toast } from "react-toastify";
+import PopupBg from "../../../components/common/PopupBg";
+import AlertPopup from "../../../components/common/AlertPopup";
 
 export default function LifeChart() {
   const [postData, setPostData] = useState(
@@ -13,6 +15,7 @@ export default function LifeChart() {
   const [chartData, setChartData] = useState(
     new Array(1).fill({ x: "", y: "" })
   );
+  const [alertPopup, setAlertPopup] = useState(false);
 
   function getData() {
     axios
@@ -59,7 +62,7 @@ export default function LifeChart() {
       .post(API.CLASS_SUBMIT, { class: "lifeplanning", value: postData })
       .then((res) => {
         console.log(res);
-        toast("Submit Complete");
+        setAlertPopup("Submit Complete");
       })
       .catch((err) => console.error(err));
   }
@@ -149,6 +152,13 @@ export default function LifeChart() {
           </article>
         </section>
       </LifeChartBox>
+
+      {alertPopup && (
+        <>
+          <AlertPopup cont={alertPopup} off={setAlertPopup} />
+          <PopupBg bg off={setAlertPopup} />
+        </>
+      )}
     </>
   );
 }
