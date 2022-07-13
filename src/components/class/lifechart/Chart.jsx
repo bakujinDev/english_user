@@ -60,7 +60,8 @@ export default function Chart({ chartData }) {
 
 const ChartBox = styled.div`
   width: 200vw;
-  height: 100%;
+  aspect-ratio: 2;
+  padding: 40px 60px 0 0;
 `;
 
 const initData = [

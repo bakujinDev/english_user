@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import DetailHeader from "../../../components/header/DetailHeader";
 import Chart from "../../../components/class/lifechart/Chart";
+import axios from "axios";
+import { API } from "../../../config/api";
+import { toast } from "react-toastify";
 
 export default function LifeChart() {
   const [postData, setPostData] = useState(
@@ -10,6 +13,18 @@ export default function LifeChart() {
   const [chartData, setChartData] = useState(
     new Array(1).fill({ x: "", y: "" })
   );
+
+  function getData() {
+    axios
+      .get(`${API.CLASS_GETDATA}/lifeplanning`)
+      .then(({ data }) => {
+        console.log(data);
+
+        setPostData([...data.resData.value]);
+        setChartData([...data.resData.value]);
+      })
+      .catch((err) => console.error(err));
+  }
 
   function onChangeInput(i, type, value) {
     let _postData = postData;
@@ -39,12 +54,24 @@ export default function LifeChart() {
     setChartData([..._chartData]);
   }
 
+  function onClickSubmitBtn() {
+    axios
+      .post(API.CLASS_SUBMIT, { class: "lifeplanning", value: postData })
+      .then((res) => {
+        console.log(res);
+        toast("Submit Complete");
+      })
+      .catch((err) => console.error(err));
+  }
+
   useEffect(() => {
-    const last = postData.at(-1);
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const last = postData[postData.length - 1];
 
     if (last.x || last.y || last.memo) {
-      console.log(chartData);
-      console.log([...chartData, { x: "", y: "" }]);
       setPostData([...postData, { x: "", y: "", memo: "" }]);
       setChartData([...chartData, { x: "", y: "" }]);
     }
@@ -71,6 +98,7 @@ export default function LifeChart() {
 
                     <div className="value">
                       <input
+                        min={0}
                         type={"number"}
                         value={v.x}
                         onChange={(e) =>
@@ -86,6 +114,8 @@ export default function LifeChart() {
 
                     <div className="value">
                       <input
+                        min={-100}
+                        max={100}
                         type={"number"}
                         value={v.y}
                         onChange={(e) =>
@@ -112,6 +142,10 @@ export default function LifeChart() {
                 </li>
               ))}
             </ul>
+
+            <button className="submitBtn" onClick={onClickSubmitBtn}>
+              Submit
+            </button>
           </article>
         </section>
       </LifeChartBox>
@@ -128,7 +162,6 @@ const LifeChartBox = styled.main`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 20px 0 0;
 
     .chartCont {
       height: 100vw;
@@ -210,6 +243,16 @@ const LifeChartBox = styled.main`
             }
           }
         }
+      }
+
+      .submitBtn {
+        width: 120px;
+        height: 50px;
+        margin: 20px 0 0;
+        color: #fff;
+        font-weight: 500;
+        background: #7879f1;
+        border-radius: 8px;
       }
     }
   }

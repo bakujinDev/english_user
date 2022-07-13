@@ -1,13 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import { API } from "../../config/api";
+import axios from "axios";
 
 export default function Signup() {
   const navigate = useNavigate();
 
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [pw, setPw] = useState("");
+  const [confirmPw, setConfirmPw] = useState("");
+  const [alarm, setAlarm] = useState("");
+
+  function onClickSignupBtn() {
+    axios
+      .post(API.SIGNUP, { username, pw })
+      .then(({ data }) => {
+        console.log(data);
+        localStorage.setItem("token", data.token);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.error(err.response.data.message);
+        setAlarm(err.response.data.message);
+      });
+  }
+
+  useEffect(() => {
+    if (!(pw && confirmPw)) return;
+
+    if (pw === confirmPw) setAlarm("");
+    else setAlarm("password are not matching");
+  }, [pw, confirmPw]);
 
   return (
     <>
@@ -19,8 +44,8 @@ export default function Signup() {
               <p className="key">Name</p>
               <div className="value">
                 <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   placeholder=""
                 />
               </div>
@@ -30,8 +55,21 @@ export default function Signup() {
               <p className="key">Password</p>
               <div className="value">
                 <input
+                  type={"password"}
                   value={pw}
                   onChange={(e) => setPw(e.target.value)}
+                  placeholder=""
+                />
+              </div>
+            </li>
+
+            <li>
+              <p className="key">Confirm Password</p>
+              <div className="value">
+                <input
+                  type={"password"}
+                  value={confirmPw}
+                  onChange={(e) => setConfirmPw(e.target.value)}
                   placeholder=""
                 />
               </div>
@@ -39,10 +77,12 @@ export default function Signup() {
           </ul>
 
           <div className="btnBox">
+            <div>{alarm && <p className="alarm">{alarm}</p>}</div>
+
             <button
               className="loginBtn"
-              disabled={!(name && pw)}
-              onClick={() => {}}
+              disabled={!(username && pw && confirmPw) || alarm}
+              onClick={onClickSignupBtn}
             >
               Signup
             </button>
@@ -118,6 +158,12 @@ const SignupBox = styled.main`
       align-items: flex-start;
       gap: 12px;
       width: 100%;
+
+      .alarm {
+        font-size: 14px;
+        font-weight: 500;
+        color: #ff5353;
+      }
 
       .loginBtn {
         width: 100%;

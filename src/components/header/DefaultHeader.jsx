@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import I_3lineWhite from "../../asset/icon/I_3lineWhite.svg";
+import I_defaultProfImg from "../../asset/icon/I_defaultProfImg.svg";
 import PopupBg from "../common/PopupBg";
-import MenuBar from "./MenuBar";
+import ProfPopup from "./ProfPopup";
 
 export default function DefaultHeader() {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
+
+  const [profPopup, setProfPopup] = useState(false);
 
   return (
     <>
@@ -18,7 +20,18 @@ export default function DefaultHeader() {
         </button>
 
         {token ? (
-          <span className="profBox" />
+          <span className="profBox">
+            <button className="profBtn" onClick={() => setProfPopup(true)}>
+              <img src={I_defaultProfImg} alt="" />
+            </button>
+
+            {profPopup && (
+              <>
+                <ProfPopup off={setProfPopup} />
+                <PopupBg off={setProfPopup} />
+              </>
+            )}
+          </span>
         ) : (
           <button className="loginBtn" onClick={() => navigate("/auth/login")}>
             LOGIN
@@ -51,10 +64,22 @@ const PdefaultHeaderBox = styled.header`
   }
 
   .profBox {
-    width: 34px;
-    aspect-ratio: 1;
-    border: 1px solid #fff;
-    border-radius: 50%;
+    position: relative;
+
+    .profBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 34px;
+      aspect-ratio: 1;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      overflow: hidden;
+
+      img {
+        width: 22px;
+      }
+    }
   }
 
   .loginBtn {

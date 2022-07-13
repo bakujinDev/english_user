@@ -6,7 +6,7 @@ import { D_classList } from "../../data/D_class";
 import ClassIndex from "./ClassIndex";
 
 export default function Class() {
-  const navigate =useNavigate();
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   const [pleaseLoginPopup, setPleaseLoginPopup] = useState(false);
@@ -27,7 +27,7 @@ export default function Class() {
       {pleaseLoginPopup && (
         <>
           <PleaseLoginPopup off={setPleaseLoginPopup} />
-          <PopupBg bg off={()=>navigate(-1)} />
+          <PopupBg bg off={() => navigate("/")} />
         </>
       )}
     </>

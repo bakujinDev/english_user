@@ -1,5 +1,5 @@
-import LifeChart from "../routers/class/lifechart/LifeChart";
+import LifePlanning from "../routers/class/lifeplanning/LifePlanning";
 
 export const D_classList = [
-  { title: "Life Chart", url: "lifechart", comp: <LifeChart /> },
+  { title: "Life Planning", url: "lifeplanning", comp: <LifePlanning /> },
 ];

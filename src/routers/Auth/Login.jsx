@@ -1,13 +1,38 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import { API } from "../../config/api";
 
 export default function Login() {
   const navigate = useNavigate();
 
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [pw, setPw] = useState("");
+  const [alarm, setAlarm] = useState("");
+
+  function onKeyDown(e) {
+    if (e.key === "Enter") onClickLoginBtn();
+  }
+
+  function onClickLoginBtn() {
+    axios
+      .post(API.LOGIN, { username, pw })
+      .then(({ data }) => {
+        console.log(data);
+        localStorage.setItem("token", data.token);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.error(err.response.data.message);
+        setAlarm(err.response.data.message);
+      });
+  }
+
+  useEffect(() => {
+    setAlarm("");
+  }, [username, pw]);
 
   return (
     <>
@@ -19,8 +44,8 @@ export default function Login() {
               <p className="key">Name</p>
               <div className="value">
                 <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   placeholder=""
                 />
               </div>
@@ -30,7 +55,9 @@ export default function Login() {
               <p className="key">Password</p>
               <div className="value">
                 <input
+                  type={"password"}
                   value={pw}
+                  onKeyDown={onKeyDown}
                   onChange={(e) => setPw(e.target.value)}
                   placeholder=""
                 />
@@ -39,10 +66,12 @@ export default function Login() {
           </ul>
 
           <div className="btnBox">
+            <div>{alarm && <p className="alarm">{alarm}</p>}</div>
+
             <button
               className="loginBtn"
-              disabled={!(name && pw)}
-              onClick={() => {}}
+              disabled={!(username && pw) || alarm}
+              onClick={onClickLoginBtn}
             >
               Login
             </button>
@@ -118,6 +147,12 @@ const LoginBox = styled.main`
       align-items: flex-start;
       gap: 12px;
       width: 100%;
+
+      .alarm {
+        font-size: 14px;
+        font-weight: 500;
+        color: #ff5353;
+      }
 
       .loginBtn {
         width: 100%;

@@ -19,7 +19,7 @@ export default function Main() {
               <p>Class</p>
             </button>
 
-            <button className="" onClick={() => navigate("/word")}>
+            <button className="" disabled onClick={() => navigate("/word")}>
               <img src={I_word} alt="" />
               <p>Word</p>
             </button>
@@ -56,7 +56,7 @@ const MainBox = styled.main`
         box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
 
         &:disabled {
-          filter: brightness(80%);
+          opacity: 0.4;
         }
 
         img {

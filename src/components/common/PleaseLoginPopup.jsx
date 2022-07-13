@@ -17,7 +17,7 @@ export default function PleaseLoginPopup() {
           OK
         </button>
 
-        <button className="cancelBtn" onClick={() => navigate(-1)}>
+        <button className="cancelBtn" onClick={() => navigate("/")}>
           Dont mind
         </button>
       </div>

@@ -1,18 +1,13 @@
-import {
-  BrowserRouter,
-  HashRouter,
-  Navigate,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
+import { ToastContainer } from "react-toastify";
 import EventListener from "./components/common/EventListener";
 import GlobalStyle from "./components/common/globalStyle";
 import Auth from "./routers/Auth/Auth";
 import Class from "./routers/class/Class";
-import LifeChart from "./routers/class/lifechart/LifeChart";
 import Main from "./routers/Main";
-// import Main from "./routers/Main";
+// import "./util/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (
@@ -37,6 +32,18 @@ export default function App() {
         rel="stylesheet"
       />
 
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <BrowserRouter>
         <GlobalStyle />
         <EventListener />
@@ -45,7 +52,6 @@ export default function App() {
           <Route path="/" element={<Main />} />
           <Route path="/auth/*" element={<Auth />} />
           <Route path="/class/*" element={<Class />} />
-          <Route path="/lifechart" element={<LifeChart />} />
         </Routes>
       </BrowserRouter>
     </AppBox>
