@@ -8,6 +8,8 @@ export default function Chart({ chartData }) {
   useEffect(() => {
     if (!chartData[0].x) return;
 
+    chartData = chartData.filter((e) => e.x && e.y);
+
     setData(chartData.sort((a, b) => a.x - b.x));
   }, [chartData]);
 

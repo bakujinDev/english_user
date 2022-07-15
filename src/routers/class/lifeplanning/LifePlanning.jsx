@@ -34,13 +34,20 @@ export default function LifeChart() {
 
     switch (type) {
       case "age":
-        _postData[i].x = Number(value);
-        _chartData[i].x = Number(value);
+        value = value.replace(/[^0-9,-]/g, "");
+
+        _postData[i].x = value;
+        _chartData[i].x = value;
         break;
 
       case "happiness":
-        _postData[i].y = Number(value);
-        _chartData[i].y = Number(value);
+        value = value.replace(/[^0-9,-]/g, "");
+
+        if (value > 100) value = "100";
+        else if (value < -100) value = "-100";
+
+        _postData[i].y = value;
+        _chartData[i].y = value;
         break;
 
       case "memo":
@@ -105,10 +112,16 @@ export default function LifeChart() {
 
   useEffect(() => {
     const last = postData[postData.length - 1];
+    const last2 = postData[postData.length - 2];
 
     if (last.x || last.y || last.memo) {
       setPostData([...postData, { x: "", y: "", memo: "" }]);
       setChartData([...chartData, { x: "", y: "" }]);
+    }
+
+    if (last2 && !(last2?.x || last2?.y || last2?.memo)) {
+      setPostData([...postData.slice(0,-1)]);
+      setChartData([...chartData.slice(0,-1)]);
     }
   }, [postData]);
 
