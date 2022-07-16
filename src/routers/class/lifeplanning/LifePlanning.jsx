@@ -8,6 +8,7 @@ import PopupBg from "../../../components/common/PopupBg";
 import AlertPopup from "../../../components/common/AlertPopup";
 
 export default function LifeChart() {
+  const [color, setColor] = useState("#7879f1");
   const [postData, setPostData] = useState(
     new Array(1).fill({ x: "", y: "", memo: "" })
   );
@@ -22,6 +23,7 @@ export default function LifeChart() {
       .then(({ data }) => {
         console.log(data);
 
+        setColor(data.resData.color);
         setPostData([...data.resData.value]);
         setChartData([...data.resData.value]);
       })
@@ -98,7 +100,11 @@ export default function LifeChart() {
     });
 
     axios
-      .post(API.CLASS_SUBMIT, { class: "lifeplanning", value: _postData })
+      .post(API.CLASS_SUBMIT, {
+        class: "lifeplanning",
+        color,
+        value: _postData,
+      })
       .then((res) => {
         console.log(res);
         setAlertPopup("Submit Complete");
@@ -120,8 +126,8 @@ export default function LifeChart() {
     }
 
     if (last2 && !(last2?.x || last2?.y || last2?.memo)) {
-      setPostData([...postData.slice(0,-1)]);
-      setChartData([...chartData.slice(0,-1)]);
+      setPostData([...postData.slice(0, -1)]);
+      setChartData([...chartData.slice(0, -1)]);
     }
   }, [postData]);
 
@@ -131,9 +137,30 @@ export default function LifeChart() {
 
       <LifeChartBox>
         <section className="innerSec">
-          <div className="chartCont">
-            <Chart chartData={[...chartData]} />
-          </div>
+          <article className="chartArea">
+            <div className="chartCont">
+              <Chart chartData={[...chartData]} color={color} />
+            </div>
+
+            <div className="colorBox">
+              <ul className="colorList">
+                {colorList.map((v, i) => (
+                  <li
+                    key={i}
+                    style={{ background: v }}
+                    onClick={() => setColor(v)}
+                  />
+                ))}
+              </ul>
+
+              <input
+                className="colorInput"
+                type={"color"}
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+              />
+            </div>
+          </article>
 
           <article className="inputArea">
             <strong className="title">Plan List</strong>
@@ -218,18 +245,61 @@ const LifeChartBox = styled.main`
     flex-direction: column;
     gap: 20px;
 
-    .chartCont {
-      height: 100vw;
-      overflow-x: scroll;
+    .chartArea {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
 
-      &::-webkit-scrollbar {
-        height: 8px;
+      .chartCont {
+        height: 100vw;
+        overflow-x: scroll;
+
+        &::-webkit-scrollbar {
+          height: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          height: 8px;
+          background-color: #999;
+          border-radius: 4px;
+        }
       }
 
-      &::-webkit-scrollbar-thumb {
-        height: 8px;
-        background-color: #999;
-        border-radius: 4px;
+      .colorBox {
+        display: inline-flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
+        height: 32px;
+        padding: 0 6px;
+        margin: 0 0 0 auto;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+
+        .colorList {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          li {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+          }
+        }
+
+        input::-webkit-color-swatch {
+          border: none;
+        }
+
+        .colorInput {
+          width: 60px;
+          height: 32px;
+          border-radius: 20px;
+          overflow: hidden;
+          cursor: pointer;
+        }
       }
     }
 
@@ -312,3 +382,5 @@ const LifeChartBox = styled.main`
     }
   }
 `;
+
+const colorList = ["#FFA1A1", "#FFB72B", "#39AEA9", "#80a6ff", "#9254C8"];

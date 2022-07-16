@@ -2,7 +2,7 @@ import { ResponsiveLine } from "@nivo/line";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-export default function Chart({ chartData }) {
+export default function Chart({ chartData, color }) {
   const [data, setData] = useState(chartData);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function Chart({ chartData }) {
         pointLabelYOffset={-12}
         useMesh={true}
         legends={[]}
-        colors={["#7879f1"]}
+        colors={[color]}
       />
     </ChartBox>
   );
@@ -62,7 +62,7 @@ export default function Chart({ chartData }) {
 
 const ChartBox = styled.div`
   width: 200vw;
-  aspect-ratio: 2;
+  height: 100%;
   padding: 40px 60px 0 0;
 `;
 
