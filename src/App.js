@@ -5,6 +5,7 @@ import GlobalStyle from "./components/common/globalStyle";
 import Auth from "./routers/Auth/Auth";
 import Class from "./routers/class/Class";
 import Main from "./routers/Main";
+import Word from "./routers/word/Word";
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="/" element={<Main />} />
           <Route path="/auth/*" element={<Auth />} />
           <Route path="/class/*" element={<Class />} />
+          <Route path="/word/*" element={<Word />} />
         </Routes>
       </BrowserRouter>
     </AppBox>

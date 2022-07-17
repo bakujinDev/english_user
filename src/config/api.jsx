@@ -8,4 +8,7 @@ export const API = {
 
   CLASS_SUBMIT: URL + "/class/submit",
   CLASS_GETDATA: URL + "/class/getdata", // class
+
+  DATA_LIST: URL + "/admin/dataList", // table / limit / offset
+  WORD_DETDATA: URL + "/word/getdata", //table / id
 };

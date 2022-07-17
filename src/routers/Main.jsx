@@ -19,7 +19,7 @@ export default function Main() {
               <p>Class</p>
             </button>
 
-            <button className="" disabled onClick={() => navigate("/word")}>
+            <button className="" onClick={() => navigate("/word")}>
               <img src={I_word} alt="" />
               <p>Word</p>
             </button>
