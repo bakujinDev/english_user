@@ -189,9 +189,7 @@ export default function LifeChart() {
 
                     <div className="value">
                       <input
-                        min={-100}
-                        max={100}
-                        type={"number"}
+                        type={"tel"}
                         value={v.y}
                         onChange={(e) =>
                           onChangeInput(i, "happiness", e.target.value)
