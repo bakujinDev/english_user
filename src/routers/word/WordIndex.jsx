@@ -23,7 +23,7 @@ export default function WordIndex() {
 
   return (
     <>
-      <DetailHeader title="Class" />
+      <DetailHeader title="Word" />
 
       <WordIndexBox>
         <nav className="navList">
