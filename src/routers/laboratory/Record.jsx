@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import DetailHeader from "../../components/header/DetailHeader";
 import I_mikeWhite from "../../asset/icon/I_mikeWhite.svg";
 import moment from "moment";
 
 export default function Record() {
+  const listRef = useRef();
+
   const [recorder, setRecorder] = useState("");
   const [onRecord, setOnRecord] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
@@ -24,6 +26,12 @@ export default function Record() {
       data: URL.createObjectURL(e.data),
       name: moment(new Date()).format("HH:mm:ss"),
     });
+  }
+
+  function onClickActionBtn(i) {
+    let _audio = document.getElementById(`audio${i}`);
+    console.log(_audio);
+    _audio.play();
   }
 
   useEffect(() => {
@@ -61,43 +69,77 @@ export default function Record() {
       <DetailHeader title="record" />
 
       <RecordBox>
+        <article className="contArea">
+          <p className="title">record list</p>
+
+          <ul className="audioList" ref={listRef}>
+            {audioList.map((v, i) => (
+              <li key={i}>
+                <p>{v.name}</p>
+                <audio
+                  id={`audio${i}`}
+                  onEnded={() => {}}
+                  src={v.data}
+                  controls
+                  type="audio/mp3"
+                />
+                <button
+                  className="actionBtn"
+                  onClick={() => onClickActionBtn(i)}
+                >
+                  Play
+                </button>
+              </li>
+            ))}
+          </ul>
+        </article>
+
         <button
           className={`${onRecord ? "on" : ""} recordBtn`}
           onClick={onClickRecordBtn}
         >
           <img src={I_mikeWhite} alt="" />
         </button>
-
-        <ul className="audioList">
-          {audioList.map((v, i) => (
-            <li key={i}>
-              <p>{v.name}</p>
-              <audio
-                onEnded={() => {}}
-                src={v.data}
-                controls
-                type="audio/mp3"
-              />
-            </li>
-          ))}
-        </ul>
       </RecordBox>
     </>
   );
 }
 
 const RecordBox = styled.main`
-  height: 100%;
-  padding: 50px 20px 20px;
-  overflow-y: scroll;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden;
+
+  .contArea {
+    flex: 1;
+    overflow-y: scroll;
+
+    .title {
+      padding: 0 20px;
+      font-size: 20px;
+      color: #353535;
+    }
+
+    .audioList {
+      li {
+        height: 54px;
+
+        /* audio {
+          width: 0;
+          height: 0;
+        } */
+      }
+    }
+  }
 
   .recordBtn {
     width: 100%;
-    height: 50px;
-    padding: 8px;
-    margin: 200px 0 0;
+    height: 60px;
+    min-height: 60px;
+    padding: 10px;
     background: #7879f1;
-    border-radius: 20px;
 
     &.on {
       background: #ff5353;
