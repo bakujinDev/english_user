@@ -1,4 +1,4 @@
-export const URL = "http://www.bakujin.com:5324";
+export const URL = "https://bakujin.com:5324";
 // export const URL = "http://localhost:5324";
 
 export const API = {
@@ -12,3 +12,4 @@ export const API = {
   DATA_LIST: URL + "/admin/dataList", // table / limit / offset
   WORD_DETDATA: URL + "/word/getdata", //table / id
 };
+

@@ -33,9 +33,8 @@ export default function WordDetail() {
       <DetailHeader title={title} />
 
       <WordDetailBox>
-        {/* <section className="topBar">
+        <section className="topBar">
           <button
-            disabled
             className={`${category && "on"} toggleBtn`}
             onClick={() => setCategory(!category)}
           >
@@ -43,7 +42,7 @@ export default function WordDetail() {
             <span />
             <p className="off">left</p>
           </button>
-        </section> */}
+        </section>
 
         {category ? (
           <WordList listData={listData} />

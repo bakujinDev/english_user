@@ -4,6 +4,7 @@ import EventListener from "./components/common/EventListener";
 import GlobalStyle from "./components/common/globalStyle";
 import Auth from "./routers/Auth/Auth";
 import Class from "./routers/class/Class";
+import Laboratory from "./routers/laboratory/Laboratory";
 import Main from "./routers/Main";
 import Word from "./routers/word/Word";
 
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/auth/*" element={<Auth />} />
           <Route path="/class/*" element={<Class />} />
           <Route path="/word/*" element={<Word />} />
+          <Route path="/laboratory/*" element={<Laboratory />} />
         </Routes>
       </BrowserRouter>
     </AppBox>
