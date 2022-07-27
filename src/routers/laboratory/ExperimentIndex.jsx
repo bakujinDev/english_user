@@ -10,7 +10,7 @@ export default function ExperimentIndex() {
 
   return (
     <>
-      <DetailHeader title="Class" />
+      <DetailHeader title="Laboratory" />
 
       <ExperimentIndexBox>
         <nav className="navList">
@@ -28,6 +28,8 @@ export default function ExperimentIndex() {
 }
 
 const ExperimentIndexBox = styled.main`
+  padding: 50px 0 0;
+  
   .navList {
     button {
       display: flex;

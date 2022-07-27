@@ -27,6 +27,8 @@ export default function ClassIndex() {
 }
 
 const ClassIndexBox = styled.main`
+  padding: 50px 0 0;
+  
   .navList {
     button {
       display: flex;

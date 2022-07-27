@@ -23,12 +23,14 @@ const DetailHeaderBox = styled.header`
   justify-content: space-between;
   align-items: center;
   min-height: 50px;
-  top: 0;
   height: 50px;
   padding: 0 20px;
   color: #fff;
   background: #7879f1;
-  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+  position: fixed;
   z-index: 3;
 
   .beforeBtn img,

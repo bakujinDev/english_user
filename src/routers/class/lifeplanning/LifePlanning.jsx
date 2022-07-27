@@ -235,7 +235,7 @@ export default function LifeChart() {
 
 const LifeChartBox = styled.main`
   height: 100%;
-  padding: 0 20px 20px;
+  padding: 50px 20px 20px;
   overflow-y: scroll;
 
   .innerSec {

@@ -41,6 +41,8 @@ export default function WordIndex() {
 }
 
 const WordIndexBox = styled.main`
+  padding: 50px 0 0;
+  
   .navList {
     button {
       display: flex;

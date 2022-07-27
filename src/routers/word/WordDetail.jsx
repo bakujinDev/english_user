@@ -35,6 +35,7 @@ export default function WordDetail() {
       <WordDetailBox>
         <section className="topBar">
           <button
+            disabled
             className={`${category && "on"} toggleBtn`}
             onClick={() => setCategory(!category)}
           >
@@ -56,6 +57,7 @@ export default function WordDetail() {
 
 const WordDetailBox = styled.main`
   height: 100%;
+  padding: 50px 0 0;
   overflow-y: scroll;
 
   & > .topBar {

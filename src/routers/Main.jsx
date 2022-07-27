@@ -27,14 +27,12 @@ export default function Main() {
 
             <button
               className=""
-              disabled
               onClick={() => navigate("/laboratory")}
             >
               <img src={I_laboratory} alt="" />
               <p>Laboratory</p>
             </button>
 
-            <button disabled></button>
           </nav>
         </section>
       </MainBox>

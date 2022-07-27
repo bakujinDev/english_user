@@ -37,7 +37,7 @@ export default function Login() {
   return (
     <>
       <DefaultHeader />
-      <LoginBox>
+      <LoginBox onKeyDown={onKeyDown}>
         <section className="innerSec">
           <ul className="inputList">
             <li>
@@ -57,7 +57,6 @@ export default function Login() {
                 <input
                   type={"password"}
                   value={pw}
-                  onKeyDown={onKeyDown}
                   onChange={(e) => setPw(e.target.value)}
                   placeholder=""
                 />
