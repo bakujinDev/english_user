@@ -13,6 +13,7 @@ export default function Record() {
   const listRef = useRef();
   const importInputRef = useRef();
 
+  const [stream, setStream] = useState("");
   const [recorder, setRecorder] = useState("");
   const [onRecord, setOnRecord] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
@@ -22,10 +23,23 @@ export default function Record() {
 
   async function getRecordPermission() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    setStream(stream);
     return new MediaRecorder(stream, { type: "audio/mp3" });
   }
 
   function onClickRecordBtn() {
+    if (onRecord) {
+      recorder.stop();
+      stream.getAudioTracks().forEach((e) => e.stop());
+      setStream("");
+      setRecorder("");
+    } else {
+      getRecordPermission().then(setRecorder, (err) => {
+        console.error(err);
+        // alert("Can't use record environment");
+      });
+    }
+
     setOnRecord(!onRecord);
   }
 
@@ -120,26 +134,13 @@ export default function Record() {
     setWaveStatusList([..._waveSurferList]);
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     if (!recorder) return;
 
-    recorder.addEventListener("dataavailable", handleData);
+    await recorder.addEventListener("dataavailable", handleData);
+    recorder.start();
     return () => recorder.removeEventListener("dataavailable", handleData);
   }, [recorder]);
-
-  useEffect(() => {
-    if (!recorder) {
-      getRecordPermission().then(setRecorder, (err) => {
-        console.error(err);
-        // alert("Can't use record environment");
-      });
-
-      return;
-    }
-
-    if (onRecord) recorder.start();
-    else if (recorder.state !== "inactive") recorder.stop();
-  }, [recorder, onRecord]);
 
   useEffect(() => {
     if (!audioList) return;
