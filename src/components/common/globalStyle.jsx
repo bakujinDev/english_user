@@ -84,6 +84,10 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
 
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
   button{
     font-size: inherit;
     font-family: inherit;
