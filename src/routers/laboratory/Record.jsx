@@ -5,7 +5,9 @@ import I_mikeWhite from "../../asset/icon/I_mikeWhite.svg";
 import I_import from "../../asset/icon/I_import.svg";
 import I_play from "../../asset/icon/I_play.svg";
 import I_pause from "../../asset/icon/I_pause.svg";
+import I_x from "../../asset/icon/I_x.svg";
 import moment from "moment";
+import WaveSurfer from "wavesurfer.js";
 
 export default function Record() {
   const listRef = useRef();
@@ -15,7 +17,8 @@ export default function Record() {
   const [onRecord, setOnRecord] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
   const [audioList, setAudioList] = useState(new Array(0).fill(""));
-  const [audioQueryList, setAudioQueryList] = useState(new Array(0).fill(""));
+  const [waveSurferList, setWaveSurferList] = useState(new Array(0).fill(""));
+  const [waveStatusList, setWaveStatusList] = useState(new Array(0).fill(""));
 
   async function getRecordPermission() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -49,22 +52,18 @@ export default function Record() {
   }
 
   function onClickActionBtn(i) {
-    if (audioList[i].status === "play") audioQueryList[i].pause();
-    else audioQueryList[i].play();
+    waveSurferList[i].playPause();
   }
 
   function getAudioQuery() {
     if (!audioList.length) return;
 
-    let _children = Object.values(listRef.current.children);
-    let _audioQueryList = _children.map((e) => e.querySelector("audio"));
-
-    setTimeout(() => setAudioQueryList([..._audioQueryList]), 1);
+    setTimeout(() => setWaveStatusList([...waveSurferList]), 1);
   }
 
   function getAudioTime({ i, type }) {
-    let currentTime = audioQueryList[i]?.currentTime || 0;
-    let duration = audioQueryList[i]?.duration || 0;
+    let currentTime = waveStatusList[i]?.getCurrentTime() || 0;
+    let duration = waveStatusList[i]?.getDuration() || 0;
 
     switch (type) {
       case "current":
@@ -84,24 +83,41 @@ export default function Record() {
     }
   }
 
-  function onEventAudio({ i, type }) {
-    let _audioList = audioList;
+  function markUpWave() {
+    let _waveBox = document.getElementById(`waveBox${audioList.length - 1}`);
+    let _audioQueryList = waveSurferList;
 
-    _audioList[i].status = type;
+    const waveSurfer = WaveSurfer.create({
+      container: _waveBox,
+      barWidth: 1,
+      cursorColor: " #7879f1",
+      progressColor: " #7879f1",
+      scrollParent: true,
+    });
 
-    setAudioList([..._audioList]);
+    waveSurfer.load(audioList[audioList.length - 1].data);
+
+    waveSurfer.on("ready", () => {
+      _audioQueryList[audioList.length - 1] = waveSurfer;
+      setWaveSurferList([..._audioQueryList]);
+    });
   }
 
-  function getRangeValue(i) {
+  function onClickDelBtn(i) {
     let _audioList = audioList;
+    let _waveSurferList = waveSurferList;
 
-    let _time = Math.floor(
-      (audioQueryList[i]?.currentTime * 100) / audioQueryList[i]?.duration
-    );
+    _audioList = audioList.filter((e, index) => index !== i);
+    _waveSurferList = waveSurferList.filter((e, index) => index !== i);
 
-    _audioList[i].currentTime = _time;
+    let _waveBox = document.getElementById(`waveBox${i}`);
+    _waveBox.removeChild(_waveBox.firstElementChild);
+
+    waveSurferList[i].destroy();
 
     setAudioList([..._audioList]);
+    setWaveSurferList([..._waveSurferList]);
+    setWaveStatusList([..._waveSurferList]);
   }
 
   useEffect(() => {
@@ -135,6 +151,11 @@ export default function Record() {
   }, [audioUrl]);
 
   useEffect(() => {
+    if (!audioList.length) return;
+    // 삭제할때 기존에 있던거 유지됨 이거떄문일꺼임 length 통과되니깐
+
+    markUpWave();
+
     let _interval = setInterval(getAudioQuery, 500);
 
     return () => {
@@ -171,50 +192,61 @@ export default function Record() {
 
           <ul className="audioList" ref={listRef}>
             {audioList.map((v, i) => (
-              <details key={i}>
+              <details
+                key={i}
+                open={waveStatusList[i] && waveStatusList[i]?.isPlaying()}
+                className={`${
+                  waveStatusList[i] &&
+                  waveStatusList[i]?.isPlaying() &&
+                  "playing"
+                }`}
+              >
                 <summary>
                   <div className="summaryCont">
-                    <button
-                      className={`${v.status} actionBtn`}
-                      onClick={() => onClickActionBtn(i)}
-                    >
-                      <img className="iPlay" src={I_play} alt="" />
-                      <img className="iPause" src={I_pause} alt="" />
-                    </button>
+                    <div className="leftBox">
+                      <button
+                        id={`actionBtn${i}`}
+                        className={`actionBtn`}
+                        onClick={() => onClickActionBtn(i)}
+                      >
+                        <img
+                          className="iPlay"
+                          src={
+                            waveStatusList[i]?.isPlaying() ? I_pause : I_play
+                          }
+                          alt=""
+                        />
+                      </button>
 
-                    <div className="contBox">
-                      <div className="topBar">
-                        <p className="time">{v.createdTime}</p>
-                      </div>
+                      <div className="contBox">
+                        <div className="topBar">
+                          <p className="time">{v.createdTime}</p>
+                        </div>
 
-                      <div className="contBar">
-                        <p className="progress">
-                          {getAudioTime({ i, type: "current" })}~
-                          {getAudioTime({ i, type: "duration" })}
-                        </p>
+                        <div className="contBar">
+                          <p className="progress">
+                            <span className="current">
+                              {getAudioTime({ i, type: "current" })}
+                            </span>
+                            ~{getAudioTime({ i, type: "duration" })}
+                          </p>
+                        </div>
                       </div>
                     </div>
 
-                    <audio
-                      id={`audio${i}`}
-                      onPlay={() => onEventAudio({ i, type: "play" })}
-                      onPause={() => onEventAudio({ i, type: "pause" })}
-                      onEnded={() => onEventAudio({ i, type: "ended" })}
-                      src={v.data}
-                      controls
-                      type="audio/mp3"
-                    />
+                    <div className="rightBox">
+                      <button
+                        className="delBtn"
+                        onClick={() => onClickDelBtn(i)}
+                      >
+                        <img src={I_x} alt="" />
+                      </button>
+                    </div>
                   </div>
                 </summary>
 
                 <div className="openBox">
-                  <input
-                    type="range"
-                    value={audioList[i].currentTime}
-                    onChange={() => getRangeValue(i)}
-                    max="100"
-                  />
-                  <input />
+                  <div id={`waveBox${i}`}></div>
                 </div>
               </details>
             ))}
@@ -289,107 +321,77 @@ const RecordBox = styled.main`
       details {
         border-top: 1px solid #eee;
 
+        &.playing {
+          summary {
+            .summaryCont {
+              .leftBox {
+                .contBox {
+                  .contBar {
+                    .progress {
+                      .current {
+                        font-weight: 500;
+                        color: #7879f1;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
         summary {
           padding: 4px 20px;
 
           .summaryCont {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
             height: 52px;
 
-            .actionBtn {
+            .leftBox {
               display: flex;
-              justify-content: center;
               align-items: center;
-              width: 32px;
-              aspect-ratio: 1;
-              padding: 4px;
-              border-radius: 50%;
-              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              gap: 8px;
 
-              &.play {
-                .iPlay {
-                  display: none;
-                }
+              .actionBtn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 32px;
+                aspect-ratio: 1;
+                padding: 4px;
+                border-radius: 50%;
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
-                .iPause {
-                  display: block;
-                }
-              }
-
-              img {
-                height: 18px;
-                transition: all 0.4s;
-
-                &.iPlay {
-                  display: block;
-                }
-
-                &.iPause {
-                  display: none;
+                img {
+                  height: 18px;
                 }
               }
-            }
 
-            .contBox {
-              .topBar {
-                .time {
+              .contBox {
+                .topBar {
+                  .time {
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #666;
+                  }
+                }
+
+                .contBar {
                   font-size: 14px;
-                  font-weight: 500;
-                  color: #666;
+                  color: #aaa;
                 }
               }
-
-              .contBar {
-                font-size: 14px;
-                color: #aaa;
-              }
-            }
-
-            audio {
-              width: 0;
-              height: 0;
             }
           }
         }
 
         .openBox {
-          background: #ccc;
-        }
-      }
-
-      li {
-        display: flex;
-        flex-direction: column;
-        padding: 4px 0;
-        border-top: 1px solid #eee;
-
-        &:focus-within {
-          background: #e4e4fc;
-
-          audio {
-            &::-webkit-media-controls-panel {
-              background: #e4e4fc;
-            }
-          }
-        }
-
-        .time {
-          padding: 0 20px;
-          font-size: 14px;
-          font-weight: 500;
-          color: #666;
-        }
-
-        audio {
-          width: 100%;
-          height: 40px;
-          border-radius: 0;
-
-          &::-webkit-media-controls-panel {
-            background: #fff;
-          }
+          padding: 4px 20px;
+          background: #eee;
+          box-shadow: rgba(50, 50, 93, 0.25) 0px 5px 10px -12px inset,
+            rgba(0, 0, 0, 0.3) 0px 6px 12px -6px inset;
         }
       }
     }
