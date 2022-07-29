@@ -13,7 +13,6 @@ export default function Record() {
   const listRef = useRef();
   const importInputRef = useRef();
 
-  const [stream, setStream] = useState("");
   const [recorder, setRecorder] = useState("");
   const [onRecord, setOnRecord] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
@@ -23,23 +22,10 @@ export default function Record() {
 
   async function getRecordPermission() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    setStream(stream);
     return new MediaRecorder(stream, { type: "audio/mp3" });
   }
 
   function onClickRecordBtn() {
-    if (onRecord) {
-      recorder.stop();
-      stream.getAudioTracks().forEach((e) => e.stop());
-      setStream("");
-      setRecorder("");
-    } else {
-      getRecordPermission().then(setRecorder, (err) => {
-        console.error(err);
-        // alert("Can't use record environment");
-      });
-    }
-
     setOnRecord(!onRecord);
   }
 
@@ -98,22 +84,28 @@ export default function Record() {
   }
 
   function markUpWave() {
-    let _waveBox = document.getElementById(`waveBox${audioList.length - 1}`);
-    let _audioQueryList = waveSurferList;
+    let _audioQueryList;
 
-    const waveSurfer = WaveSurfer.create({
-      container: _waveBox,
-      barWidth: 1,
-      cursorColor: " #7879f1",
-      progressColor: " #7879f1",
-      scrollParent: true,
-    });
+    audioList.map((v, i) => {
+      let _waveBox = document.getElementById(`waveBox${i}`);
+      _audioQueryList = waveSurferList;
 
-    waveSurfer.load(audioList[audioList.length - 1].data);
+      const waveSurfer = WaveSurfer.create({
+        container: _waveBox,
+        barWidth: 1,
+        cursorColor: " #7879f1",
+        progressColor: " #7879f1",
+        scrollParent: true,
+      });
 
-    waveSurfer.on("ready", () => {
-      _audioQueryList[audioList.length - 1] = waveSurfer;
-      setWaveSurferList([..._audioQueryList]);
+      waveSurfer.load(v.data);
+
+      waveSurfer.on("ready", () => {
+        _audioQueryList[i] = waveSurfer;
+        console.log(_audioQueryList);
+
+        if (i === audioList.length - 1) setWaveSurferList([..._audioQueryList]);
+      });
     });
   }
 
@@ -124,8 +116,10 @@ export default function Record() {
     _audioList = audioList.filter((e, index) => index !== i);
     _waveSurferList = waveSurferList.filter((e, index) => index !== i);
 
-    let _waveBox = document.getElementById(`waveBox${i}`);
-    _waveBox.removeChild(_waveBox.firstElementChild);
+    audioList.map((v, i) => {
+      let _waveBox = document.getElementById(`waveBox${i}`);
+      _waveBox.removeChild(_waveBox.firstElementChild);
+    });
 
     waveSurferList[i].destroy();
 
@@ -134,13 +128,26 @@ export default function Record() {
     setWaveStatusList([..._waveSurferList]);
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     if (!recorder) return;
 
-    await recorder.addEventListener("dataavailable", handleData);
-    recorder.start();
+    recorder.addEventListener("dataavailable", handleData);
     return () => recorder.removeEventListener("dataavailable", handleData);
   }, [recorder]);
+
+  useEffect(() => {
+    if (!recorder) {
+      getRecordPermission().then(setRecorder, (err) => {
+        console.error(err);
+        // alert("Can't use record environment");
+      });
+
+      return;
+    }
+
+    if (onRecord) recorder.start();
+    else if (recorder.state !== "inactive") recorder.stop();
+  }, [recorder, onRecord]);
 
   useEffect(() => {
     if (!audioList) return;
@@ -189,6 +196,13 @@ export default function Record() {
                 placeholder=""
               />
             </div>
+
+            <input
+              ref={importInputRef}
+              type={"file"}
+              onChange={onChangeImport}
+              placeholder=""
+            />
           </div>
 
           <ul className="audioList" ref={listRef}>
@@ -247,7 +261,7 @@ export default function Record() {
                 </summary>
 
                 <div className="openBox">
-                  <div id={`waveBox${i}`}></div>
+                  <div id={`waveBox${i}`}>{}</div>
                 </div>
               </details>
             ))}
@@ -364,7 +378,6 @@ const RecordBox = styled.main`
                 padding: 4px;
                 border-radius: 50%;
                 box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-
                 img {
                   height: 18px;
                 }
@@ -408,11 +421,9 @@ const RecordBox = styled.main`
     bottom: 0;
     left: 0;
     position: fixed;
-
     &.on {
       background: #ff5353;
     }
-
     img {
       height: 100%;
     }

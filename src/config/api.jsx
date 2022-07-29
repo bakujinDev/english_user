@@ -11,5 +11,6 @@ export const API = {
 
   DATA_LIST: URL + "/admin/dataList", // table / limit / offset
   WORD_DETDATA: URL + "/word/getdata", //table / id
-};
 
+  RECORD: URL + "/record",
+};

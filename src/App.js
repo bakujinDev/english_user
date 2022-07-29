@@ -6,6 +6,7 @@ import Auth from "./routers/Auth/Auth";
 import Class from "./routers/class/Class";
 import Laboratory from "./routers/laboratory/Laboratory";
 import Main from "./routers/Main";
+import Record from "./routers/Record/Record";
 import Word from "./routers/word/Word";
 
 export default function App() {
@@ -40,6 +41,7 @@ export default function App() {
           <Route path="/auth/*" element={<Auth />} />
           <Route path="/class/*" element={<Class />} />
           <Route path="/word/*" element={<Word />} />
+          <Route path="/record/*" element={<Record />} />
           <Route path="/laboratory/*" element={<Laboratory />} />
         </Routes>
       </BrowserRouter>

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import DefaultHeader from "../components/header/DefaultHeader";
 import I_class from "../asset/menu/I_class.png";
 import I_word from "../asset/menu/I_word.png";
+import I_record from "../asset/menu/I_record.svg";
 import I_laboratory from "../asset/menu/I_laboratory.png";
 
 export default function Main() {
@@ -25,14 +26,15 @@ export default function Main() {
               <p>Word</p>
             </button>
 
-            <button
-              className=""
-              onClick={() => navigate("/laboratory")}
-            >
+            <button className="" onClick={() => navigate("/record")}>
+              <img src={I_record} alt="" />
+              <p>Record</p>
+            </button>
+
+            <button className="" onClick={() => navigate("/laboratory")}>
               <img src={I_laboratory} alt="" />
               <p>Laboratory</p>
             </button>
-
           </nav>
         </section>
       </MainBox>
@@ -58,10 +60,11 @@ const MainBox = styled.main`
         justify-content: center;
         align-items: center;
         gap: 8px;
+        min-width: calc(50% - 6px);
         max-width: 50%;
         aspect-ratio: 1;
         font-size: 20px;
-        font-weight: 400;
+        font-weight: 500;
         text-transform: capitalize;
         background: #fff;
         border-radius: 28px;
@@ -72,6 +75,7 @@ const MainBox = styled.main`
         }
 
         img {
+          max-width: 50%;
           height: 50%;
         }
       }
