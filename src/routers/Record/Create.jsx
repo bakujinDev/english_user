@@ -28,10 +28,15 @@ export default function Create() {
   }
 
   function handleData(e) {
-    console.log(e.data);
-    setAudioUrl({
-      data: URL.createObjectURL(e.data),
-    });
+    var reader = new FileReader();
+
+    reader.onloadend = function () {
+      console.log(reader.result);
+      setAudioUrl({
+        data: reader.result,
+      });
+    };
+    reader.readAsDataURL(e.data);
   }
 
   function onChangeImport(e) {
