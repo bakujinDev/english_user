@@ -11,16 +11,19 @@ import axios from "axios";
 import { API } from "../../config/api";
 import AlertPopup from "../../components/common/AlertPopup";
 import PopupBg from "../../components/common/PopupBg";
+import { useNavigate } from "react-router-dom";
 
 export default function Create() {
   const importInputRef = useRef();
   const waveRef = useRef();
+  const navigate = useNavigate();
 
   const [recorder, setRecorder] = useState("");
   const [onRecord, setOnRecord] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
   const [waveStatus, setWaveStatus] = useState("");
   const [alertPopup, setAlertPopup] = useState(false);
+  const [uploadBusy, setUploadBusy] = useState(false);
 
   async function getRecordPermission() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -55,7 +58,7 @@ export default function Create() {
   }
 
   function onClickRecordBtn() {
-    setOnRecord(true);
+    setOnRecord(!onRecord);
   }
 
   function onClickActionBtn() {
@@ -113,6 +116,8 @@ export default function Create() {
   }
 
   function onClickSubmitBtn() {
+    setUploadBusy(true);
+
     axios
       .post(API.RECORD, {
         data: audioUrl.data,
@@ -120,6 +125,7 @@ export default function Create() {
       .then((res) => {
         console.log(res);
         setAlertPopup("Submit Complete");
+        setUploadBusy(false);
       })
       .catch(console.error);
   }
@@ -214,7 +220,11 @@ export default function Create() {
                 />
               </button>
 
-              <button className="submitBtn" onClick={onClickSubmitBtn}>
+              <button
+                className="submitBtn"
+                disabled={uploadBusy}
+                onClick={onClickSubmitBtn}
+              >
                 Submit
               </button>
 
@@ -235,8 +245,20 @@ export default function Create() {
 
       {alertPopup && (
         <>
-          <AlertPopup cont={alertPopup} off={() => setAlertPopup()} />
-          <PopupBg bg off={() => setAlertPopup()} />
+          <AlertPopup
+            cont={alertPopup}
+            off={() => {
+              setAlertPopup();
+              navigate(-1, { state: { reload: true } });
+            }}
+          />
+          <PopupBg
+            bg
+            off={() => {
+              setAlertPopup();
+              navigate(-1, { state: { reload: true } });
+            }}
+          />
         </>
       )}
     </>

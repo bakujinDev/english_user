@@ -4,7 +4,7 @@ import I_rtArw from "../../asset/icon/I_rtArw.svg";
 import I_pause from "../../asset/icon/I_pause.svg";
 import I_play from "../../asset/icon/I_play.svg";
 import I_mikeWhite from "../../asset/icon/I_mikeWhite.svg";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import axios from "axios";
@@ -13,6 +13,9 @@ import WaveSurfer from "wavesurfer.js";
 
 export default function RecordIndex() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log(location);
 
   const [listData, setListData] = useState([]);
   const [waveSurferList, setWaveSurferList] = useState([]);
@@ -39,7 +42,9 @@ export default function RecordIndex() {
   }
 
   function onToggleDetail(e, v, i) {
-    if (e.target.open && !waveSurferList[i])
+    if (e.target.open && !waveSurferList[i]) {
+      console.log(waveSurferList[i]);
+
       axios
         .get(`${API.RECORD}/${v.target_id}`)
         .then(({ data }) => {
@@ -48,6 +53,7 @@ export default function RecordIndex() {
           markUpWave({ i, audioUrl: data.audioUrl });
         })
         .catch(console.error);
+    }
   }
 
   function onClickActionBtn(i) {
