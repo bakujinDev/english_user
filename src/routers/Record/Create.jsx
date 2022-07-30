@@ -250,7 +250,7 @@ export default function Create() {
             off={() => {
               setAlertPopup();
               navigate(-1);
-              sessionStorage.setItem("reload", true);
+              // sessionStorage.setItem("reload", true);
             }}
           />
           <PopupBg
@@ -258,7 +258,7 @@ export default function Create() {
             off={() => {
               setAlertPopup();
               navigate(-1);
-              sessionStorage.setItem("reload", true);
+              // sessionStorage.setItem("reload", true);
             }}
           />
         </>

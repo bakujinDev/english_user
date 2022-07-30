@@ -38,10 +38,10 @@ export default function EventListener() {
   }, []);
 
   useLayoutEffect(() => {
-    if (sessionStorage.getItem("reload")) {
-      sessionStorage.removeItem("reload");
-      window.location.reload();
-    }
+    // if (sessionStorage.getItem("reload")) {
+    //   sessionStorage.removeItem("reload");
+    //   window.location.reload();
+    // }
   }, [location]);
 
   useEffect(() => {
