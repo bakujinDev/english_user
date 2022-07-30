@@ -22,7 +22,7 @@ export default function Create() {
   const [onRecord, setOnRecord] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
   const [waveStatus, setWaveStatus] = useState("");
-  const [alertPopup, setAlertPopup] = useState(true);
+  const [alertPopup, setAlertPopup] = useState(false);
   const [uploadBusy, setUploadBusy] = useState(false);
 
   async function getRecordPermission() {
