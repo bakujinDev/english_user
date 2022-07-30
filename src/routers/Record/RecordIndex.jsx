@@ -4,8 +4,8 @@ import I_rtArw from "../../asset/icon/I_rtArw.svg";
 import I_pause from "../../asset/icon/I_pause.svg";
 import I_play from "../../asset/icon/I_play.svg";
 import I_mikeWhite from "../../asset/icon/I_mikeWhite.svg";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import moment from "moment";
 import axios from "axios";
 import { API } from "../../config/api";
@@ -13,9 +13,6 @@ import WaveSurfer from "wavesurfer.js";
 
 export default function RecordIndex() {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  
 
   const [listData, setListData] = useState([]);
   const [waveSurferList, setWaveSurferList] = useState([]);
@@ -115,7 +112,6 @@ export default function RecordIndex() {
       clearInterval(_interval);
     };
   }, [waveSurferList]);
-  
 
   return (
     <>
