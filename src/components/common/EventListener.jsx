@@ -37,6 +37,13 @@ export default function EventListener() {
     getColorScheme();
   }, []);
 
+  useLayoutEffect(() => {
+    if (sessionStorage.getItem("reload")) {
+      sessionStorage.removeItem("reload");
+      window.location.reload();
+    }
+  }, [location]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     axios.defaults.headers.Authorization = `Bearer ${token}`;

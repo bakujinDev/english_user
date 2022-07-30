@@ -26,7 +26,7 @@ export default function Main() {
               <p>Word</p>
             </button>
 
-            <button className="" onClick={() => navigate("/record")}>
+            <button className="" onClick={() => navigate("/record",{state:{unReload:true}})}>
               <img src={I_record} alt="" />
               <p>Record</p>
             </button>

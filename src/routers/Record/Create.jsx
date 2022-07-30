@@ -22,7 +22,7 @@ export default function Create() {
   const [onRecord, setOnRecord] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
   const [waveStatus, setWaveStatus] = useState("");
-  const [alertPopup, setAlertPopup] = useState(false);
+  const [alertPopup, setAlertPopup] = useState(true);
   const [uploadBusy, setUploadBusy] = useState(false);
 
   async function getRecordPermission() {
@@ -249,14 +249,16 @@ export default function Create() {
             cont={alertPopup}
             off={() => {
               setAlertPopup();
-              navigate(-1, { state: { reload: true } });
+              navigate(-1);
+              sessionStorage.setItem("reload", true);
             }}
           />
           <PopupBg
             bg
             off={() => {
               setAlertPopup();
-              navigate(-1, { state: { reload: true } });
+              navigate(-1);
+              sessionStorage.setItem("reload", true);
             }}
           />
         </>
