@@ -249,16 +249,16 @@ export default function Create() {
             cont={alertPopup}
             off={() => {
               setAlertPopup();
+              sessionStorage.setItem("reload", true);
               navigate(-1);
-              // sessionStorage.setItem("reload", true);
             }}
           />
           <PopupBg
             bg
             off={() => {
               setAlertPopup();
+              sessionStorage.setItem("reload", true);
               navigate(-1);
-              // sessionStorage.setItem("reload", true);
             }}
           />
         </>
