@@ -55,7 +55,7 @@ export default function Create() {
   }
 
   function onClickRecordBtn() {
-    setOnRecord(!onRecord);
+    setOnRecord(true);
   }
 
   function onClickActionBtn() {
@@ -128,6 +128,7 @@ export default function Create() {
     waveRef.current.destroy();
     setAudioUrl("");
     setWaveStatus("");
+    setOnRecord(false);
   }
 
   useEffect(() => {
@@ -166,12 +167,6 @@ export default function Create() {
     };
   }, [waveRef]);
 
-  useEffect(() => {
-    console.log(
-      "blob:https://english.bakujin.com/8c378f41-0e58-4c49-bcd7-a3fd10c28879".toString()
-    );
-  }, []);
-
   return (
     <>
       <DetailHeader title="Record" />
@@ -205,39 +200,37 @@ export default function Create() {
                 ~{getAudioTime("duration")}
               </p>
             </div>
-
-            <div className="btnBox">
-              {audioUrl ? (
-                <>
-                  <button className={`playPauseBtn`} onClick={onClickActionBtn}>
-                    <img
-                      className="iPlay"
-                      src={
-                        waveStatus && waveStatus?.isPlaying ? I_pause : I_play
-                      }
-                      alt=""
-                    />
-                  </button>
-
-                  <button className="submitBtn" onClick={onClickSubmitBtn}>
-                    Submit
-                  </button>
-
-                  <button className="delBtn" onClick={onClickDelBtn}>
-                    <img src={I_x} alt="" />
-                  </button>
-                </>
-              ) : (
-                <button
-                  className={`${onRecord ? "on" : ""} recordBtn`}
-                  onClick={onClickRecordBtn}
-                >
-                  <img src={I_mikeWhite} alt="" />
-                </button>
-              )}
-            </div>
           </article>
         </section>
+
+        <div className="btnBox">
+          {audioUrl ? (
+            <>
+              <button className={`playPauseBtn`} onClick={onClickActionBtn}>
+                <img
+                  className="iPlay"
+                  src={waveStatus && waveStatus?.isPlaying ? I_pause : I_play}
+                  alt=""
+                />
+              </button>
+
+              <button className="submitBtn" onClick={onClickSubmitBtn}>
+                Submit
+              </button>
+
+              <button className="delBtn" onClick={onClickDelBtn}>
+                <img src={I_x} alt="" />
+              </button>
+            </>
+          ) : (
+            <button
+              className={`${onRecord ? "on" : ""} recordBtn`}
+              onClick={onClickRecordBtn}
+            >
+              <img src={I_mikeWhite} alt="" />
+            </button>
+          )}
+        </div>
       </CreateBox>
 
       {alertPopup && (
@@ -295,7 +288,7 @@ const CreateBox = styled.main`
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 0 20px 20px;
+      padding: 0 20px 50px;
 
       .waveCont {
         flex: 1;
@@ -321,67 +314,75 @@ const CreateBox = styled.main`
           }
         }
       }
+    }
+  }
 
-      .btnBox {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
+  .btnBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+    position: fixed;
 
-        .playPauseBtn {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 40px;
-          height: 40px;
-          padding: 8px;
-          background: #f9f9f9;
-          border-radius: 50%;
+    .playPauseBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      padding: 8px;
+      background: #f9f9f9;
+      border-radius: 50%;
 
-          img {
-            width: 14px;
-            opacity: 0.4;
-          }
-        }
+      img {
+        width: 14px;
+        opacity: 0.4;
+      }
+    }
 
-        .submitBtn {
-          height: 50px;
-          padding: 0 20px;
-          color: #fff;
-          font-weight: 700;
-          background: #7879f1;
-          border-radius: 40px;
-        }
+    .submitBtn {
+      height: 50px;
+      padding: 0 20px;
+      color: #fff;
+      font-weight: 700;
+      background: #7879f1;
+      border-radius: 40px;
+    }
 
-        .delBtn {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 40px;
-          height: 40px;
-          background: #f9f9f9;
-          border-radius: 50%;
+    .delBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      background: #f9f9f9;
+      border-radius: 50%;
 
-          img {
-            opacity: 0.4;
-          }
-        }
+      img {
+        opacity: 0.4;
+      }
+    }
 
-        .recordBtn {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 50px;
-          height: 50px;
-          padding: 8px;
-          background: #7879f1;
-          border-radius: 50%;
+    .recordBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      height: 50px;
+      padding: 8px;
+      background: #7879f1;
+      border-radius: 50%;
 
-          img {
-            width: 100%;
-            height: 100%;
-          }
-        }
+      img {
+        width: 100%;
+        height: 100%;
+      }
+
+      &.on {
+        background: #ff5353;
       }
     }
   }
