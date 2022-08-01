@@ -168,7 +168,7 @@ export default function RecordIndex() {
 }
 
 const RecordIndexBox = styled.main`
-  padding: 50px 0 0;
+  padding: 50px 0 60px;
 
   .navList {
     padding: 0 20px;
