@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import DetailHeader from "../../components/header/DetailHeader";
 import I_rtArw from "../../asset/icon/I_rtArw.svg";
-import I_pause from "../../asset/icon/I_pause.svg";
-import I_play from "../../asset/icon/I_play.svg";
 import I_mikeWhite from "../../asset/icon/I_mikeWhite.svg";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -10,15 +8,22 @@ import moment from "moment";
 import axios from "axios";
 import { API } from "../../config/api";
 import WaveSurfer from "wavesurfer.js";
+import { ReactComponent as I_ltArw } from "../../asset/icon/I_ltArw.svg";
+import ReactDatePicker from "react-datepicker";
+import { CustomHeader, CustomInput } from "../../util/CustomDatePicker";
+import { ReactComponent as I_pause } from "../../asset/icon/I_pause.svg";
+import { ReactComponent as I_play } from "../../asset/icon/I_play.svg";
 
 export default function RecordIndex() {
   const navigate = useNavigate();
 
   const [listData, setListData] = useState([]);
   const [waveSurferList, setWaveSurferList] = useState([]);
+  const [targetDate, setTargetDate] = useState(new Date());
+  const [dataWeek, setDataWeek] = useState([]);
 
-  function markUpWave({ i, audioUrl }) {
-    let _waveBox = document.getElementById(`waveBox${i}`);
+  function markUpWave({ monthI, i, audioUrl }) {
+    let _waveBox = document.getElementById(`waveBox${monthI}_${i}`);
 
     const waveSurfer = WaveSurfer.create({
       container: _waveBox,
@@ -26,6 +31,7 @@ export default function RecordIndex() {
       cursorColor: " #7879f1",
       progressColor: " #7879f1",
       scrollParent: true,
+      backgroundColor: "#323741",
     });
 
     waveSurfer.load(audioUrl);
@@ -34,20 +40,17 @@ export default function RecordIndex() {
       let _waveSurferList = waveSurferList;
       _waveSurferList[i] = waveSurfer;
       setWaveSurferList([..._waveSurferList]);
-      // waveRef.current = waveSurfer;
     });
   }
 
-  function onToggleDetail(e, v, i) {
+  function onToggleDetail(e, v, monthI, i) {
     if (e.target.open && !waveSurferList[i]) {
-      console.log(waveSurferList[i]);
-
       axios
         .get(`${API.RECORD}/${v.target_id}`)
         .then(({ data }) => {
           console.log(data);
 
-          markUpWave({ i, audioUrl: data.audioUrl });
+          markUpWave({ monthI, i, audioUrl: data.audioUrl });
         })
         .catch(console.error);
     }
@@ -65,10 +68,9 @@ export default function RecordIndex() {
     }, 1);
   }
 
-  function getAudioTime(type, i) {
-    console.log(waveSurferList[i]);
-    let currentTime = (waveSurferList[i] && waveSurferList[i].currentTime) || 0;
-    let duration = (waveSurferList[i] && waveSurferList[i].duration) || 0;
+  function getAudioTime({ type, i }) {
+    let currentTime = waveSurferList[i]?.getCurrentTime() || 0;
+    let duration = waveSurferList[i]?.getDuration() || 0;
 
     switch (type) {
       case "current":
@@ -88,24 +90,41 @@ export default function RecordIndex() {
     }
   }
 
+  function getDataWeek(list) {
+    let _dataWeek = list.map((e) => {
+      const _createTime = moment(e.createdate).utc(true);
+      return _createTime.week() - moment(_createTime).startOf("month").week();
+    });
+
+    setDataWeek(_dataWeek);
+  }
+
   function getList() {
     axios
-      .get(API.RECORD)
+      .get(API.RECORD, {
+        params: {
+          date: new Date(targetDate.setDate(10)),
+        },
+      })
       .then(({ data }) => {
         console.log(data.resData);
-
+        getDataWeek(data.resData);
         setListData(data.resData);
       })
       .catch((err) => console.error(err));
   }
 
   useEffect(() => {
-    getList();
-  }, []);
+    setListData([]);
+    waveSurferList.map((e) => e && e.destroy());
+    setWaveSurferList([]);
+  }, [targetDate]);
 
   useEffect(() => {
-    if (!waveSurferList[0]) return;
+    getList();
+  }, [targetDate]);
 
+  useEffect(() => {
     let _interval = setInterval(getAudioQuery, 500);
 
     return () => {
@@ -118,46 +137,91 @@ export default function RecordIndex() {
       <DetailHeader title="Record" />
 
       <RecordIndexBox>
-        <nav className="navList">
-          {listData.map((v, i) => (
-            <details key={i} onToggle={(e) => onToggleDetail(e, v, i)}>
-              <summary>
-                {moment(v.createdate).format("YYYY/MM/DD HH.mm.ss")}
-              </summary>
+        <section className="innerBox">
+          <article className="contArea">
+            <div className="topBar">
+              <span className="dateBox">
+                <ReactDatePicker
+                  selected={targetDate}
+                  onChange={(date) => setTargetDate(date)}
+                  dateFormat="yyyy/MM"
+                  showMonthYearPicker
+                  showFullMonthYearPicker
+                  calendarClassName={`customPicker`}
+                  customInput={<CustomInput />}
+                  renderCustomHeader={CustomHeader}
+                />
+              </span>
+            </div>
 
-              <div className="openCont">
-                <div className="contBox">
-                  <button
-                    className={`actionBtn`}
-                    onClick={() => onClickActionBtn(i)}
-                  >
-                    <img
-                      className="iPlay"
-                      src={waveSurferList[i]?.isPlaying() ? I_pause : I_play}
-                      alt=""
-                    />
-                  </button>
-                  <div id={`waveBox${i}`} className="waveBox"></div>
-                </div>
+            <div className="monthCont">
+              {[0, 1, 2, 3, 4]
+                .filter((v) => dataWeek.find((e) => e === v) + 1)
+                .map((monthV, monthI) => (
+                  <details key={monthI} className="weekDetails">
+                    <summary>
+                      <span className="summaryBox">
+                        <p className="key">{monthV + 1}th week</p>
+                        <div className="line" />
+                      </span>
+                    </summary>
 
-                <div className="infoBox">
-                  <p className="progress">
-                    <span
-                      className={`${
-                        waveSurferList[i] &&
-                        waveSurferList[i].currentTime &&
-                        "current"
-                      } `}
-                    >
-                      {(getAudioTime("current"), i)}
-                    </span>
-                    ~{(getAudioTime("duration"), i)}
-                  </p>
-                </div>
-              </div>
-            </details>
-          ))}
-        </nav>
+                    <ul className="recordList">
+                      {listData
+                        .filter((v, i) => dataWeek[i] === monthV)
+                        .map((v, i) => (
+                          <details
+                            key={i}
+                            onToggle={(e) => onToggleDetail(e, v, monthI, i)}
+                          >
+                            <summary>
+                              {moment(v.createdate).format(
+                                "YYYY/MM/DD HH:mm:ss"
+                              )}
+                            </summary>
+
+                            <div className="openCont">
+                              <div className="contBox">
+                                <div
+                                  id={`waveBox${monthI}_${i}`}
+                                  className="waveBox"
+                                ></div>
+                              </div>
+
+                              <div className="infoBox">
+                                <button
+                                  className={`actionBtn`}
+                                  onClick={() => onClickActionBtn(i)}
+                                >
+                                  {waveSurferList[i]?.isPlaying() ? (
+                                    <I_pause />
+                                  ) : (
+                                    <I_play />
+                                  )}
+                                </button>
+
+                                <p className="progress">
+                                  <span
+                                    className={`${
+                                      waveSurferList[i] &&
+                                      waveSurferList[i]?.getCurrentTime() &&
+                                      "current"
+                                    } `}
+                                  >
+                                    {getAudioTime({ type: "current", i })}
+                                  </span>
+                                  ~{getAudioTime({ type: "duration", i })}
+                                </p>
+                              </div>
+                            </div>
+                          </details>
+                        ))}
+                    </ul>
+                  </details>
+                ))}
+            </div>
+          </article>
+        </section>
 
         <nav className={`recordBtn`} onClick={() => navigate("create")}>
           <img src={I_mikeWhite} alt="" />
@@ -168,45 +232,168 @@ export default function RecordIndex() {
 }
 
 const RecordIndexBox = styled.main`
+  height: 100%;
   padding: 50px 0 60px;
+  background: #2a2f3b;
 
-  .navList {
-    padding: 0 20px;
-    summary {
+  .innerBox {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    .contArea {
       display: flex;
-      align-items: center;
-      height: 32px;
-    }
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      height: 100%;
+      padding: 10px 20px 0;
+      overflow-y: scroll;
 
-    .openCont {
-      .contBox {
+      .topBar {
         display: flex;
+        justify-content: flex-end;
         align-items: center;
-        gap: 20px;
-        height: 140px;
 
-        .actionBtn {
-          width: 22px;
-          height: 22px;
-          border-radius: 50%;
+        .outBtn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
 
-          img {
-            width: 100%;
+          svg {
+            height: 16px;
+
+            .fill {
+              fill: #7b849c;
+            }
+          }
+
+          .pageTitle {
+            font-size: 20px;
+            line-height: 20px;
+            font-weight: 600;
+            font-family: "Poppins", sans-serif;
+            color: #7b849c;
           }
         }
 
-        .waveBox {
-          flex: 1;
-          padding: 4px;
-          background: #eee;
-          box-shadow: rgba(50, 50, 93, 0.25) 0px 5px 10px -12px inset,
-            rgba(0, 0, 0, 0.3) 0px 6px 12px -6px inset;
+        .dateBox {
+          width: 100px;
         }
       }
 
-      .infoBox {
-        display: flex;
-        justify-content: flex-end;
+      .monthCont {
+        .weekDetails {
+          color: #7b849c;
+
+          &[open] {
+            & > summary {
+              .summaryBox {
+                color: #97a2bf;
+
+                .key {
+                }
+
+                .line {
+                  border-color: #97a2bf;
+                }
+              }
+            }
+          }
+
+          summary {
+            .summaryBox {
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              .key {
+              }
+
+              .line {
+                flex: 1;
+                height: 1px;
+                border-bottom: 1px dashed #7b849c;
+              }
+            }
+          }
+
+          .recordList {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            details {
+              padding: 4px 0;
+
+              &[open] {
+                & > summary {
+                  color: #fff;
+                }
+              }
+
+              summary {
+                display: flex;
+                align-items: center;
+                height: 32px;
+              }
+
+              .openCont {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+
+                .contBox {
+                  display: flex;
+                  align-items: center;
+                  gap: 20px;
+                  height: 140px;
+
+                  .waveBox {
+                    flex: 1;
+                    padding: 4px;
+                    background: #eee;
+                    box-shadow: rgba(50, 50, 93, 0.25) 0px 5px 10px -12px inset,
+                      rgba(0, 0, 0, 0.3) 0px 6px 12px -6px inset;
+                  }
+                }
+
+                .infoBox {
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+
+                  .actionBtn {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 30px;
+                    height: 30px;
+                    padding: 8px;
+                    border-radius: 50%;
+                    background: #2a55c0;
+
+                    svg {
+                      height: 100%;
+
+                      .fill {
+                        fill: #fff;
+                      }
+                    }
+                  }
+
+                  .progress {
+                    color: #7b849c;
+
+                    .current {
+                      color: #fff;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

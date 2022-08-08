@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import DetailHeader from "../../components/header/DetailHeader";
-import I_import from "../../asset/icon/I_import.svg";
 import I_mikeWhite from "../../asset/icon/I_mikeWhite.svg";
-import I_x from "../../asset/icon/I_x.svg";
-import I_play from "../../asset/icon/I_play.svg";
-import I_pause from "../../asset/icon/I_pause.svg";
+import { ReactComponent as I_import } from "../../asset/icon/I_import.svg";
+import { ReactComponent as I_x } from "../../asset/icon/I_x.svg";
+import { ReactComponent as I_play } from "../../asset/icon/I_play.svg";
+import { ReactComponent as I_pause } from "../../asset/icon/I_pause.svg";
 import WaveSurfer from "wavesurfer.js";
 import axios from "axios";
 import { API } from "../../config/api";
 import AlertPopup from "../../components/common/AlertPopup";
 import PopupBg from "../../components/common/PopupBg";
 import { useNavigate } from "react-router-dom";
+import LoadingBar from "../../components/common/LoadingBar";
 
 export default function Create() {
   const importInputRef = useRef();
@@ -19,6 +20,7 @@ export default function Create() {
   const navigate = useNavigate();
 
   const [recorder, setRecorder] = useState("");
+  const [loader, setLoader] = useState(false);
   const [onRecord, setOnRecord] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
   const [waveStatus, setWaveStatus] = useState("");
@@ -106,6 +108,7 @@ export default function Create() {
       cursorColor: " #7879f1",
       progressColor: " #7879f1",
       scrollParent: true,
+      backgroundColor: "#323741",
     });
 
     waveSurfer.load(audioUrl.data);
@@ -138,6 +141,12 @@ export default function Create() {
   }
 
   useEffect(() => {
+    return () => {
+      sessionStorage.setItem("reload", true);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!recorder) return;
 
     recorder.addEventListener("dataavailable", handleData);
@@ -146,10 +155,16 @@ export default function Create() {
 
   useEffect(() => {
     if (!recorder) {
-      getRecordPermission().then(setRecorder, (err) => {
-        console.error(err);
-        // alert("Can't use record environment");
-      });
+      getRecordPermission().then(
+        (res) => {
+          setRecorder(res);
+          setLoader(true);
+        },
+        (err) => {
+          console.error(err);
+          // alert("Can't use record environment");
+        }
+      );
 
       return;
     }
@@ -173,6 +188,14 @@ export default function Create() {
     };
   }, [waveRef]);
 
+  useEffect(() => {
+    if (!loader) return;
+
+    setTimeout(() => {
+      setLoader(false);
+    }, 2000);
+  }, [loader]);
+
   return (
     <>
       <DetailHeader title="Record" />
@@ -184,7 +207,7 @@ export default function Create() {
               className="importBtn"
               onClick={() => importInputRef.current.click()}
             >
-              <img src={I_import} alt="" />
+              <I_import />
 
               <input
                 ref={importInputRef}
@@ -213,11 +236,7 @@ export default function Create() {
           {audioUrl ? (
             <>
               <button className={`playPauseBtn`} onClick={onClickActionBtn}>
-                <img
-                  className="iPlay"
-                  src={waveStatus && waveStatus?.isPlaying ? I_pause : I_play}
-                  alt=""
-                />
+                {waveStatus && waveStatus?.isPlaying ? <I_pause /> : <I_play />}
               </button>
 
               <button
@@ -229,7 +248,7 @@ export default function Create() {
               </button>
 
               <button className="delBtn" onClick={onClickDelBtn}>
-                <img src={I_x} alt="" />
+                <I_x />
               </button>
             </>
           ) : (
@@ -241,7 +260,18 @@ export default function Create() {
             </button>
           )}
         </div>
+
+        {/* <button
+          className="loading"
+          onClick={() => {
+            setLoader(true);
+          }}
+        >
+          loading
+        </button> */}
       </CreateBox>
+
+      {loader && <LoadingBar />}
 
       {alertPopup && (
         <>
@@ -249,7 +279,6 @@ export default function Create() {
             cont={alertPopup}
             off={() => {
               setAlertPopup();
-              sessionStorage.setItem("reload", true);
               navigate(-1);
             }}
           />
@@ -257,7 +286,6 @@ export default function Create() {
             bg
             off={() => {
               setAlertPopup();
-              sessionStorage.setItem("reload", true);
               navigate(-1);
             }}
           />
@@ -270,6 +298,7 @@ export default function Create() {
 const CreateBox = styled.main`
   height: 100%;
   padding: 50px 0 0;
+  background: #2a2f3b;
 
   .innerBox {
     display: flex;
@@ -288,16 +317,20 @@ const CreateBox = styled.main`
         justify-content: center;
         align-items: center;
         width: 40px;
-        aspect-ratio: 1;
+        height: 40px;
         padding: 8px 8px 8px 10px;
         border-radius: 50%;
-        background: #f9f9f9;
+        background: #323741;
         position: relative;
 
-        img {
+        svg {
           width: 100%;
           height: 100%;
           object-fit: contain;
+
+          .fill {
+            fill: #7b849c;
+          }
         }
 
         input {
@@ -324,17 +357,18 @@ const CreateBox = styled.main`
           width: 100%;
           min-height: 128px;
           background: #eee;
-          box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
-            rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+          box-shadow: rgba(50, 50, 93, 0.25) 0px 5px 10px -12px inset,
+            rgba(0, 0, 0, 0.3) 0px 6px 12px -6px inset;
         }
 
         .progress {
           display: flex;
           justify-content: flex-end;
+          color: #7b849c;
 
           .current {
             font-weight: 500;
-            color: #7879f1;
+            color: #fff;
           }
         }
       }
@@ -358,12 +392,15 @@ const CreateBox = styled.main`
       width: 40px;
       height: 40px;
       padding: 8px;
-      background: #f9f9f9;
+      background: #7b849c;
       border-radius: 50%;
 
-      img {
+      svg {
         width: 14px;
-        opacity: 0.4;
+
+        .fill {
+          fill: #ccc;
+        }
       }
     }
 
@@ -382,11 +419,15 @@ const CreateBox = styled.main`
       align-items: center;
       width: 40px;
       height: 40px;
-      background: #f9f9f9;
+      background: #7b849c;
       border-radius: 50%;
 
-      img {
-        opacity: 0.4;
+      svg {
+        width: 14px;
+
+        .fill {
+          fill: #ccc;
+        }
       }
     }
 

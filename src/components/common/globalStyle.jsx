@@ -119,15 +119,97 @@ const GlobalStyle = createGlobalStyle`
   
   
   //custom 
-.defaultPopup{
-  background: #fff;
-  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
-  top: 50%;
-  left: 50%;
-  position: fixed;
-  z-index: 6;
-  transform: translate(-50%, -50%);
+  .defaultPopup{
+    background: #fff;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    top: 50%;
+    left: 50%;
+    position: fixed;
+    z-index: 6;
+    transform: translate(-50%, -50%);
+  }
+
+
+  .customInput{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 28px;
+    color: #7b849c;
+    border: 2px solid #484d5a;
+    border-radius: 6px;
+    
+    &:focus-within {
+      color: #fff;
+      border-color: #1f5eff;
+    }
+  }
+
+.react-datepicker-popper{
+  z-index: 4;
+}
+
+  .customPicker{
+    color: #7b849c;
+    background: #2a2f3b;
+    border-color: #1f5eff;
+    overflow: hidden;
+
+    .react-datepicker__header.react-datepicker__header--custom{
+      padding: 0;
+      border:none;
+      border-bottom: 2px solid #484d5a;
+    }
+    
+    .customHeader{
+      height: 40px;
+      font-weight: 600;
+      color: #fff;
+      background: #2a2f3b;
+      border-color: #484d5a;
+      
+      button{
+        font-weight: 600;
+        color: #7b849c;
+
+        &:active{
+          color: #fff;
+        }
+      }
+    }
+
+  .react-datepicker__triangle{
+    display: none;
+  }
+
+  .customHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 16px;
+
+    button{
+      font-size: 20px;
+    }
+  }
+
+  .react-datepicker__month-container{
+    .react-datepicker__month.react-datepicker__monthPicker{
+      .react-datepicker__month-wrapper{
+        .react-datepicker__month-text{
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          width: 80px;
+          height: 32px;
+          font-weight: 600;
+        }
+      }
+    }
+  }
 }
 `;
 
