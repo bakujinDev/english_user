@@ -147,38 +147,43 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
-.react-datepicker-popper{
+
+  .react-datepicker-popper{
   z-index: 4;
 }
 
-  .customPicker{
-    color: #7b849c;
+.customPicker{
+
+  color: #7b849c;
+  background: #2a2f3b;
+  border-color: #1f5eff;
+  overflow: hidden;
+
+  .react-datepicker__header.react-datepicker__header--custom{
+    padding: 0;
+    border:none;
+    border-bottom: 2px solid #484d5a;
+  }
+
+
+  
+  .customHeader{
+    height: 40px;
+    font-weight: 600;
+    color: #fff;
     background: #2a2f3b;
-    border-color: #1f5eff;
-    overflow: hidden;
-
-    .react-datepicker__header.react-datepicker__header--custom{
-      padding: 0;
-      border:none;
-      border-bottom: 2px solid #484d5a;
-    }
+    border-color: #484d5a;
     
-    .customHeader{
-      height: 40px;
+    button{
       font-weight: 600;
-      color: #fff;
-      background: #2a2f3b;
-      border-color: #484d5a;
-      
-      button{
-        font-weight: 600;
-        color: #7b849c;
+      color: #7b849c;
 
-        &:active{
-          color: #fff;
-        }
+      &:active{
+        color: #fff;
       }
     }
+  
+  }
 
   .react-datepicker__triangle{
     display: none;
@@ -197,7 +202,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .react-datepicker__month-container{
+
     .react-datepicker__month.react-datepicker__monthPicker{
+
+     
       .react-datepicker__month-wrapper{
         .react-datepicker__month-text{
           display: inline-flex;
@@ -206,6 +214,11 @@ const GlobalStyle = createGlobalStyle`
           width: 80px;
           height: 32px;
           font-weight: 600;
+
+          &.react-datepicker__month-text--keyboard-selected{
+            color: #fff;
+            background: #2579ba;
+          }
         }
       }
     }
