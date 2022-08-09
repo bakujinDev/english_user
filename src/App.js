@@ -8,6 +8,7 @@ import Laboratory from "./routers/laboratory/Laboratory";
 import Main from "./routers/Main";
 import Record from "./routers/Record/Record";
 import Word from "./routers/word/Word";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function App() {
   return (

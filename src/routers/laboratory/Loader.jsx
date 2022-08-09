@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 
-export default function LoadingBar() {
+export default function Loader() {
   const delay = 0.5;
   const aniStep = 12;
 
@@ -20,7 +20,7 @@ export default function LoadingBar() {
   }, [trigger]);
 
   return (
-    <LoadingBarBox>
+    <LoaderBox >
       {trigger && (
         <svg width="370" height="160" viewBox="0 0 370 160">
           <text x="0" y="50%">
@@ -61,7 +61,7 @@ export default function LoadingBar() {
           </text>
         </svg>
       )}
-    </LoadingBarBox>
+    </LoaderBox>
   );
 }
 
@@ -93,7 +93,7 @@ const disapearAni = keyframes`
 }
 `;
 
-const LoadingBarBox = styled.main`
+const LoaderBox = styled.main`
   display: flex;
   justify-content: center;
   align-items: center;

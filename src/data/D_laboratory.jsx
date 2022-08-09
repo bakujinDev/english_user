@@ -1,5 +1,6 @@
-import Record from "../routers/laboratory/Record";
+import Loader from "../routers/laboratory/Loader";
+
 
 export const D_experimentList = [
-  { title: "Record", url: "record", comp: <Record /> },
+  { title: "Loader", url: "loader", comp: <Loader /> },
 ];

@@ -11,9 +11,9 @@ export default function Laboratory() {
 
   const [pleaseLoginPopup, setPleaseLoginPopup] = useState(false);
 
-  useEffect(() => {
-    if (!token) setPleaseLoginPopup(true);
-  }, []);
+  // useEffect(() => {
+  //   if (!token) setPleaseLoginPopup(true);
+  // }, []);
 
   return (
     <>
