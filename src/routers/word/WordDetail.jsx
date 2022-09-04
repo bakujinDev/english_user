@@ -67,7 +67,6 @@ const WordDetailBox = styled.main`
     height: 44px;
     padding: 0 14px;
     margin: 0 0 10px 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
     .title {
       font-size: 20px;
@@ -82,7 +81,7 @@ const WordDetailBox = styled.main`
       padding: 2px;
       border-radius: 16px;
       box-shadow: inset 0 2px rgba(0, 0, 0, 0.2);
-      background: rgba(0, 0, 0, 0.12);
+      background: #484d5a;
       position: relative;
 
       &.on {

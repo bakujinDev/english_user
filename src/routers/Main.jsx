@@ -45,6 +45,7 @@ export default function Main() {
 const MainBox = styled.main`
   height: 100%;
   padding: 20px;
+
   overflow-y: scroll;
 
   .innerBox {
@@ -65,8 +66,9 @@ const MainBox = styled.main`
         aspect-ratio: 1;
         font-size: 20px;
         font-weight: 500;
+        color: #fff;
         text-transform: capitalize;
-        background: #fff;
+        background: #323741;
         border-radius: 28px;
         box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
 
@@ -77,6 +79,7 @@ const MainBox = styled.main`
         img {
           max-width: 50%;
           height: 50%;
+          filter: saturate(0.84);
         }
       }
     }

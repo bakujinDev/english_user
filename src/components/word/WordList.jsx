@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ReactComponent as I_x } from "../../asset/icon/I_x.svg";
 import I_speaker from "../../asset/icon/I_speaker.svg";
 
 export default function WordList({ listData }) {
@@ -89,7 +88,7 @@ const PwordListBox = styled.section`
       padding: 6px 0;
 
       &:nth-of-type(n + 2) {
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        border-top: 1px solid #7b849c;
       }
 
       .contBox {
@@ -106,7 +105,7 @@ const PwordListBox = styled.section`
           font-weight: 600;
 
           &.value {
-            color: #999;
+            color: #97a2bf;
           }
 
           &.disVisble {

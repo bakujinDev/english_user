@@ -102,39 +102,75 @@ const LoginBox = styled.main`
     flex-direction: column;
     gap: 40px;
     width: 100%;
-    padding: 0 20px;
 
     .inputList {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 24px;
 
       li {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 10px;
 
         .key {
-          font-size: 12px;
-          color: #6d7582;
+          font-size: 16px;
+          color: #7b849c;
         }
 
-        .value {
-          display: flex;
-          align-items: center;
-          min-height: 36px;
+        input {
+          width: 100%;
+          height: 48px;
+          padding: 0 20px;
           font-weight: 600;
-          border: 2px solid #ddd;
+          border: 2px solid #484d5a;
+          background: #2a2f3b;
           border-radius: 8px;
-          overflow: hidden;
 
           &:focus-within {
             border-color: #7879f1;
           }
+        }
 
-          input {
-            flex: 1;
-            padding: 0 8px;
+        .autoBtn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #7b849c;
+
+          &.on {
+            color: #fff;
+
+            .chkBox {
+              border-color: #7879f1;
+
+              svg {
+                opacity: 1;
+              }
+            }
+          }
+
+          .chkBox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 20px;
+            height: 20px;
+            padding: 2px;
+            border: 1px solid #7b849c;
+            border-radius: 4px;
+
+            svg {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              opacity: 0;
+              transition: 0.8s;
+
+              .fill {
+                fill: #1f5eff;
+              }
+            }
           }
         }
       }
@@ -163,7 +199,8 @@ const LoginBox = styled.main`
         border-radius: 20px;
 
         &:disabled {
-          background: #d0d0f7;
+          color: #7b849c;
+          background: #2a2f3b;
         }
       }
 

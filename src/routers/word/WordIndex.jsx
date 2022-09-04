@@ -53,8 +53,8 @@ const WordIndexBox = styled.main`
       padding: 0 20px;
       font-size: 18px;
       font-weight: 500;
-      color: #353c49;
-      border-bottom: 1px solid #aaa;
+      color: #7b849c;
+      border-bottom: 1px solid #353c49;
     }
   }
 `;

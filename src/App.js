@@ -52,4 +52,6 @@ export default function App() {
 
 const AppBox = styled.div`
   height: 100vh;
+  color: #fff;
+  background: #22242a;
 `;

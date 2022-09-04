@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import DetailHeader from "../../components/header/DetailHeader";
-import I_rtArw from "../../asset/icon/I_rtArw.svg";
 import I_mikeWhite from "../../asset/icon/I_mikeWhite.svg";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -8,7 +7,6 @@ import moment from "moment";
 import axios from "axios";
 import { API } from "../../config/api";
 import WaveSurfer from "wavesurfer.js";
-import { ReactComponent as I_ltArw } from "../../asset/icon/I_ltArw.svg";
 import ReactDatePicker from "react-datepicker";
 import { CustomHeader, CustomInput } from "../../util/CustomDatePicker";
 import { ReactComponent as I_pause } from "../../asset/icon/I_pause.svg";
@@ -18,7 +16,9 @@ export default function RecordIndex() {
   const navigate = useNavigate();
 
   const [listData, setListData] = useState([]);
-  const [waveSurferList, setWaveSurferList] = useState([]);
+  const [waveSurferList, setWaveSurferList] = useState(
+    Array.from(Array(5), () => new Array(1))
+  );
   const [targetDate, setTargetDate] = useState(new Date());
   const [dataWeek, setDataWeek] = useState([]);
 
@@ -38,13 +38,13 @@ export default function RecordIndex() {
 
     waveSurfer.on("ready", () => {
       let _waveSurferList = waveSurferList;
-      _waveSurferList[i] = waveSurfer;
+      _waveSurferList[monthI][i] = waveSurfer;
       setWaveSurferList([..._waveSurferList]);
     });
   }
 
   function onToggleDetail(e, v, monthI, i) {
-    if (e.target.open && !waveSurferList[i]) {
+    if (e.target.open && !waveSurferList[monthI][i]) {
       axios
         .get(`${API.RECORD}/${v.target_id}`)
         .then(({ data }) => {
@@ -56,8 +56,8 @@ export default function RecordIndex() {
     }
   }
 
-  function onClickActionBtn(i) {
-    waveSurferList[i].playPause();
+  function onClickActionBtn(monthI, i) {
+    waveSurferList[monthI][i].playPause();
   }
 
   function getAudioQuery() {
@@ -68,9 +68,9 @@ export default function RecordIndex() {
     }, 1);
   }
 
-  function getAudioTime({ type, i }) {
-    let currentTime = waveSurferList[i]?.getCurrentTime() || 0;
-    let duration = waveSurferList[i]?.getDuration() || 0;
+  function getAudioTime({ type, monthI, i }) {
+    let currentTime = waveSurferList[monthI][i]?.getCurrentTime() || 0;
+    let duration = waveSurferList[monthI][i]?.getDuration() || 0;
 
     switch (type) {
       case "current":
@@ -115,9 +115,13 @@ export default function RecordIndex() {
   }
 
   useEffect(() => {
+    return () => sessionStorage.setItem("reload", true);
+  }, []);
+
+  useEffect(() => {
     setListData([]);
-    waveSurferList.map((e) => e && e.destroy());
-    setWaveSurferList([]);
+    waveSurferList.map((e) => e && e.map((detV) => detV.destroy()));
+    setWaveSurferList(Array.from(Array(5), () => new Array(1)));
   }, [targetDate]);
 
   useEffect(() => {
@@ -127,9 +131,7 @@ export default function RecordIndex() {
   useEffect(() => {
     let _interval = setInterval(getAudioQuery, 500);
 
-    return () => {
-      clearInterval(_interval);
-    };
+    return () => clearInterval(_interval);
   }, [waveSurferList]);
 
   return (
@@ -155,7 +157,7 @@ export default function RecordIndex() {
             </div>
 
             <div className="monthCont">
-              {[0, 1, 2, 3, 4]
+              {[...Array(waveSurferList.length).keys()]
                 .filter((v) => dataWeek.find((e) => e === v) + 1)
                 .map((monthV, monthI) => (
                   <details key={monthI} className="weekDetails">
@@ -191,9 +193,9 @@ export default function RecordIndex() {
                               <div className="infoBox">
                                 <button
                                   className={`actionBtn`}
-                                  onClick={() => onClickActionBtn(i)}
+                                  onClick={() => onClickActionBtn(monthI, i)}
                                 >
-                                  {waveSurferList[i]?.isPlaying() ? (
+                                  {waveSurferList[monthI][i]?.isPlaying() ? (
                                     <I_pause />
                                   ) : (
                                     <I_play />
@@ -203,14 +205,23 @@ export default function RecordIndex() {
                                 <p className="progress">
                                   <span
                                     className={`${
-                                      waveSurferList[i] &&
-                                      waveSurferList[i]?.getCurrentTime() &&
-                                      "current"
+                                      waveSurferList[monthI][
+                                        i
+                                      ]?.getCurrentTime() && "current"
                                     } `}
                                   >
-                                    {getAudioTime({ type: "current", i })}
+                                    {getAudioTime({
+                                      type: "current",
+                                      monthI,
+                                      i,
+                                    })}
                                   </span>
-                                  ~{getAudioTime({ type: "duration", i })}
+                                  ~
+                                  {getAudioTime({
+                                    type: "duration",
+                                    monthI,
+                                    i,
+                                  })}
                                 </p>
                               </div>
                             </div>
@@ -248,7 +259,7 @@ const RecordIndexBox = styled.main`
       gap: 8px;
       width: 100%;
       height: 100%;
-      padding: 10px 20px 0;
+      padding: 10px 20px;
       overflow-y: scroll;
 
       .topBar {
@@ -284,6 +295,10 @@ const RecordIndexBox = styled.main`
       }
 
       .monthCont {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
         .weekDetails {
           color: #7b849c;
 
