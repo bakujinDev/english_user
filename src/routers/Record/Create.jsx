@@ -17,11 +17,14 @@ import LoadingBar from "../../components/common/LoadingBar";
 export default function Create() {
   const importInputRef = useRef();
   const waveRef = useRef();
+  const recordTimeRef = useRef(0);
+  const timeInterval = useRef(null);
   const navigate = useNavigate();
 
   const [recorder, setRecorder] = useState("");
   const [loader, setLoader] = useState(false);
   const [onRecord, setOnRecord] = useState(false);
+  const [recordTime, setRecordTime] = useState(0);
   const [audioUrl, setAudioUrl] = useState("");
   const [waveStatus, setWaveStatus] = useState("");
   const [alertPopup, setAlertPopup] = useState(false);
@@ -65,6 +68,23 @@ export default function Create() {
 
   function onClickActionBtn() {
     waveRef.current.playPause();
+  }
+
+  /**
+   * 녹화중일때 녹화시간 타이머
+   */
+  function timerOnRecord() {
+    if (onRecord) {
+      timeInterval.current = setInterval(() => {
+        recordTimeRef.current += 1;
+        setRecordTime(recordTimeRef.current);
+      }, 1000);
+    } else {
+      if (timeInterval.current) {
+        clearInterval(clearInterval(timeInterval.current));
+        timeInterval.current = null;
+      }
+    }
   }
 
   function getAudioQuery() {
@@ -138,6 +158,8 @@ export default function Create() {
     setAudioUrl("");
     setWaveStatus("");
     setOnRecord(false);
+    recordTimeRef.current = 0;
+    setRecordTime(0);
   }
 
   useEffect(() => {
@@ -154,6 +176,17 @@ export default function Create() {
   }, [recorder]);
 
   useEffect(() => {
+    timerOnRecord();
+
+    return () => {
+      if (timeInterval.current) {
+        clearInterval(clearInterval(timeInterval.current));
+        timeInterval.current = null;
+      }
+    };
+  }, [onRecord]);
+
+  useEffect(() => {
     if (!recorder) {
       getRecordPermission().then(
         (res) => {
@@ -162,7 +195,6 @@ export default function Create() {
         },
         (err) => {
           console.error(err);
-          // alert("Can't use record environment");
         }
       );
 
@@ -196,6 +228,8 @@ export default function Create() {
     }, 2000);
   }, [loader]);
 
+  console.log(recordTimeRef.current);
+
   return (
     <>
       <DetailHeader title="Record" />
@@ -223,10 +257,20 @@ export default function Create() {
               <div id="waveBox" className="waveBox"></div>
 
               <p className="progress">
-                <span className={`${waveStatus.currentTime && "current"} `}>
+                <span className={`${waveStatus.currentTime && "current"}`}>
                   {getAudioTime("current")}
                 </span>
-                ~{getAudioTime("duration")}
+                ~
+                {onRecord ? (
+                  <span className={`record total`}>
+                    {`${String(Math.floor(recordTime / 60)).padStart(
+                      2,
+                      "0"
+                    )}:${String(recordTime % 60).padStart(2, "0")}`}
+                  </span>
+                ) : (
+                  <span className={`total`}>{getAudioTime("duration")}</span>
+                )}
               </p>
             </div>
           </article>
@@ -260,15 +304,6 @@ export default function Create() {
             </button>
           )}
         </div>
-
-        {/* <button
-          className="loading"
-          onClick={() => {
-            setLoader(true);
-          }}
-        >
-          loading
-        </button> */}
       </CreateBox>
 
       {loader && <LoadingBar />}
@@ -369,6 +404,13 @@ const CreateBox = styled.main`
           .current {
             font-weight: 500;
             color: #fff;
+          }
+
+          .total {
+            &.record {
+              font-weight: 500;
+              color: #fff;
+            }
           }
         }
       }
