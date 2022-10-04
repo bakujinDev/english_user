@@ -7,9 +7,11 @@ export default function PleaseLoginPopup() {
   return (
     <PleaseLoginPopupBox className="defaultPopup">
       <p className="explain">
-        For using this contents, your name is required
+        For using this contents,
         <br />
-        Please log in and use it
+        your name is required.
+        <br />
+        <strong>Please log in</strong> and use it
       </p>
 
       <div className="btnBox">
@@ -30,13 +32,21 @@ const PleaseLoginPopupBox = styled.section`
   flex-direction: column;
   align-items: center;
   gap: 32px;
-  width: 360px;
+  max-width: 360px;
+  width: 90vw;
   padding: 24px 20px;
+  color: #7b849c;
+  background: #2a2f3b;
+  border: 2px solid #484d5a;
 
   .explain {
     width: 240px;
     font-size: 16px;
     text-align: center;
+
+    strong {
+      color: #fff;
+    }
   }
 
   .btnBox {
