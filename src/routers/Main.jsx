@@ -4,6 +4,7 @@ import DefaultHeader from "../components/header/DefaultHeader";
 import I_class from "../asset/menu/I_class.png";
 import I_word from "../asset/menu/I_word.png";
 import I_record from "../asset/menu/I_record.svg";
+import I_qna from "../asset/menu/I_qna.png";
 import I_laboratory from "../asset/menu/I_laboratory.png";
 
 export default function Main() {
@@ -18,23 +19,28 @@ export default function Main() {
           <nav>
             <button className="" onClick={() => navigate("/class")}>
               <img src={I_class} alt="" />
-              <p>Class</p>
+              <h1>Class</h1>
             </button>
 
             <button className="" onClick={() => navigate("/word")}>
               <img src={I_word} alt="" />
-              <p>Word</p>
+              <h1>Word</h1>
             </button>
 
             <button className="" onClick={() => navigate("/record")}>
               <img src={I_record} alt="" />
-              <p>Record</p>
+              <h1>Record</h1>
             </button>
 
-            <button className="" onClick={() => navigate("/laboratory")}>
-              <img src={I_laboratory} alt="" />
-              <p>Laboratory</p>
+            <button className="" onClick={() => navigate("/help")}>
+              <img src={I_qna} alt="" />
+              <h1>Help</h1>
             </button>
+
+            {/* <button className="" onClick={() => navigate("/laboratory")}>
+              <img src={I_laboratory} alt="" />
+              <h1>Laboratory</h1>
+            </button> */}
           </nav>
         </section>
       </MainBox>
@@ -44,11 +50,12 @@ export default function Main() {
 
 const MainBox = styled.main`
   height: 100%;
-  padding: 20px;
-
+  padding: 50px 20px 0;
   overflow-y: scroll;
 
   .innerBox {
+    padding: 20px 0 0;
+
     nav {
       display: flex;
       flex-wrap: wrap;
@@ -64,8 +71,6 @@ const MainBox = styled.main`
         min-width: calc(50% - 6px);
         max-width: 50%;
         aspect-ratio: 1;
-        font-size: 20px;
-        font-weight: 500;
         color: #fff;
         text-transform: capitalize;
         background: #323741;
@@ -79,7 +84,13 @@ const MainBox = styled.main`
         img {
           max-width: 50%;
           height: 50%;
+          object-fit: contain;
           filter: saturate(0.84);
+        }
+
+        h1 {
+          font-size: 20px;
+          font-weight: 500;
         }
       }
     }

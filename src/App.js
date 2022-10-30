@@ -9,8 +9,21 @@ import Main from "./routers/Main";
 import Record from "./routers/Record/Record";
 import Word from "./routers/word/Word";
 import "react-datepicker/dist/react-datepicker.css";
+import Help from "./routers/Help/Help";
+import { useEffect } from "react";
+import { useState } from "react";
+import TermPopup from "./components/common/TermPopup";
+import PopupBg from "./components/common/PopupBg";
 
 export default function App() {
+  const token = localStorage.getItem("token");
+
+  const [termPopup, setTermPopup] = useState(false);
+
+  useEffect(() => {
+    if (token && !localStorage.getItem("readTerm")) setTermPopup(true);
+  }, []);
+
   return (
     <AppBox className="appBox">
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -37,12 +50,20 @@ export default function App() {
         <GlobalStyle />
         <EventListener />
 
+        {termPopup && (
+          <>
+            <TermPopup off={setTermPopup} />
+            <PopupBg blur off={setTermPopup} />
+          </>
+        )}
+
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/auth/*" element={<Auth />} />
           <Route path="/class/*" element={<Class />} />
           <Route path="/word/*" element={<Word />} />
           <Route path="/record/*" element={<Record />} />
+          <Route path="/help/*" element={<Help />} />
           <Route path="/laboratory/*" element={<Laboratory />} />
         </Routes>
       </BrowserRouter>

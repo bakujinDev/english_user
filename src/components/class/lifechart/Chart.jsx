@@ -55,6 +55,9 @@ export default function Chart({ chartData, color }) {
         useMesh={true}
         legends={[]}
         colors={[color]}
+        theme={{
+          textColor: "#fff",
+        }}
       />
     </ChartBox>
   );
@@ -65,48 +68,3 @@ const ChartBox = styled.div`
   height: 100%;
   padding: 40px 60px 0 0;
 `;
-
-const initData = [
-  {
-    id: "lifeChart",
-    color: "hsl(297, 70%, 50%)",
-    data: [
-      {
-        x: "1",
-        y: null,
-      },
-      {
-        x: 2,
-        y: 94,
-      },
-      {
-        x: 5,
-        y: 270,
-      },
-      {
-        x: 6,
-        y: 143,
-      },
-      {
-        x: 12,
-        y: 123,
-      },
-      {
-        x: 20,
-        y: 262,
-      },
-      {
-        x: 22,
-        y: 138,
-      },
-      {
-        x: 24,
-        y: 30,
-      },
-      {
-        x: 26,
-        y: 98,
-      },
-    ],
-  },
-];

@@ -345,7 +345,8 @@ const LifeChartBox = styled.main`
               align-items: center;
               min-height: 36px;
               font-weight: 600;
-              border: 2px solid #ddd;
+              background: #2a2f3b;
+              border: 2px solid #484d5a;
               border-radius: 8px;
               overflow: hidden;
 
@@ -362,6 +363,8 @@ const LifeChartBox = styled.main`
                 flex: 1;
                 padding: 8px;
                 height: 80px;
+                background: #2a2f3b;
+                border: 2px solid #484d5a;
               }
             }
           }

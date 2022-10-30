@@ -4,6 +4,9 @@ import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import { API } from "../../config/api";
 import axios from "axios";
+import { ReactComponent as I_chk } from "../../asset/icon/I_chk.svg";
+import PopupBg from "../../components/common/PopupBg";
+import TermPopup from "../../components/common/TermPopup";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -12,6 +15,8 @@ export default function Signup() {
   const [pw, setPw] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
   const [alarm, setAlarm] = useState("");
+  const [agreeTerm, setAgreeTerm] = useState(false);
+  const [termPopup, setTermPopup] = useState(false);
 
   function onClickSignupBtn() {
     axios
@@ -74,21 +79,42 @@ export default function Signup() {
                 />
               </div>
             </li>
+
+            <li>
+              <div className="agreeBox">
+                <button
+                  className={`${agreeTerm && "on"} chkBox`}
+                  onClick={() => setAgreeTerm(!agreeTerm)}
+                >
+                  {agreeTerm && <I_chk />}
+                </button>
+
+                <p>
+                  I agree to the{" "}
+                  <span
+                    className="detailBtn"
+                    onClick={() => setTermPopup(true)}
+                  >
+                    Terms of service
+                  </span>
+                </p>
+              </div>
+            </li>
           </ul>
 
           <div className="btnBox">
             <div>{alarm && <p className="alarm">{alarm}</p>}</div>
 
             <button
-              className="loginBtn"
-              disabled={!(username && pw && confirmPw) || alarm}
+              className="signupBtn"
+              disabled={!(username && pw && confirmPw && agreeTerm) || alarm}
               onClick={onClickSignupBtn}
             >
               Signup
             </button>
 
             <button
-              className="signupBtn"
+              className="loginBtn"
               onClick={() => navigate("/auth/login")}
             >
               Login
@@ -96,6 +122,13 @@ export default function Signup() {
           </div>
         </section>
       </SignupBox>
+
+      {termPopup && (
+        <>
+          <TermPopup off={setTermPopup} />
+          <PopupBg off={setTermPopup} />
+        </>
+      )}
     </>
   );
 }
@@ -106,7 +139,7 @@ const SignupBox = styled.main`
   justify-content: center;
   align-items: center;
   height: 100%;
-  padding: 20px;
+  padding: 50px 20px 0;
   overflow-y: scroll;
 
   .innerSec {
@@ -127,7 +160,8 @@ const SignupBox = styled.main`
 
         .key {
           font-size: 16px;
-          color: #6d7582;
+          font-weight: 500;
+          color: #7b849c;
         }
 
         .value {
@@ -150,6 +184,51 @@ const SignupBox = styled.main`
             padding: 0 12px;
           }
         }
+
+        .agreeBox {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 16px;
+          font-weight: 500;
+          color: #7b849c;
+
+          .chkBox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 20px;
+            height: 20px;
+            padding: 2px;
+            border: 1px solid #7b849c;
+            border-radius: 4px;
+
+            &.on {
+              border-color: #1f5eff;
+
+              svg {
+                opacity: 1;
+              }
+            }
+
+            svg {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              opacity: 0;
+              transition: 0.8s;
+
+              .fill {
+                fill: #1f5eff;
+              }
+            }
+          }
+
+          .detailBtn {
+            color: #7879f1;
+            text-decoration: underline;
+          }
+        }
       }
     }
 
@@ -166,7 +245,7 @@ const SignupBox = styled.main`
         color: #ff5353;
       }
 
-      .loginBtn {
+      .signupBtn {
         width: 100%;
         height: 44px;
         font-size: 18px;
@@ -181,7 +260,7 @@ const SignupBox = styled.main`
         }
       }
 
-      .signupBtn {
+      .loginBtn {
         font-size: 14px;
         font-weight: 600;
         color: #7879f1;

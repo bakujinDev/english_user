@@ -52,7 +52,7 @@ const PdefaultHeaderBox = styled.header`
   top: 0;
   right: 0;
   left: 0;
-  position: sticky;
+  position: fixed;
   z-index: 3;
 
   .logoBtn {

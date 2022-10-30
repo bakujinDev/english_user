@@ -31,7 +31,7 @@ const PopupBgBox = styled.div`
   }
 
   &.blur {
-    -webkit-backdrop-filter: blur(50px);
-    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
   }
 `;
