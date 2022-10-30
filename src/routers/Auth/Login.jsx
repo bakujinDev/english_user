@@ -121,7 +121,7 @@ const LoginBox = styled.main`
         input {
           width: 100%;
           height: 48px;
-          padding: 0 20px;
+          padding: 0 12px;
           font-weight: 600;
           border: 2px solid #484d5a;
           background: #2a2f3b;

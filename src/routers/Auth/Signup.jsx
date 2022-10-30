@@ -114,29 +114,29 @@ const SignupBox = styled.main`
     flex-direction: column;
     gap: 40px;
     width: 100%;
-    padding: 0 20px;
 
     .inputList {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 24px;
 
       li {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 10px;
 
         .key {
-          font-size: 12px;
+          font-size: 16px;
           color: #6d7582;
         }
 
         .value {
           display: flex;
           align-items: center;
-          min-height: 36px;
+          min-height: 48px;
           font-weight: 600;
-          border: 2px solid #ddd;
+          background: #2a2f3b;
+          border: 2px solid #484d5a;
           border-radius: 8px;
           overflow: hidden;
 
@@ -146,7 +146,8 @@ const SignupBox = styled.main`
 
           input {
             flex: 1;
-            padding: 0 8px;
+            height: 100%;
+            padding: 0 12px;
           }
         }
       }
@@ -175,7 +176,8 @@ const SignupBox = styled.main`
         border-radius: 20px;
 
         &:disabled {
-          background: #d0d0f7;
+          color: #7b849c;
+          background: #2a2f3b;
         }
       }
 
