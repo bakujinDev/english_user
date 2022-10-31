@@ -14,10 +14,11 @@ import { ReactComponent as I_play } from "../../asset/icon/I_play.svg";
 
 export default function RecordIndex() {
   const navigate = useNavigate();
+  const weekNum = 6;
 
   const [listData, setListData] = useState([]);
   const [waveSurferList, setWaveSurferList] = useState(
-    Array.from(Array(5), () => new Array(1))
+    Array.from(Array(weekNum), () => new Array(1))
   );
   const [targetDate, setTargetDate] = useState(new Date());
   const [dataWeek, setDataWeek] = useState([]);
@@ -121,7 +122,7 @@ export default function RecordIndex() {
   useEffect(() => {
     setListData([]);
     waveSurferList.map((e) => e && e.map((detV) => detV.destroy()));
-    setWaveSurferList(Array.from(Array(5), () => new Array(1)));
+    setWaveSurferList(Array.from(Array(weekNum), () => new Array(1)));
   }, [targetDate]);
 
   useEffect(() => {
