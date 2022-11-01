@@ -244,9 +244,8 @@ export default function RecordIndex() {
 }
 
 const RecordIndexBox = styled.main`
-  height: 100%;
+  height: 100vh;
   padding: 50px 0 60px;
-  background: #2a2f3b;
 
   .innerBox {
     display: flex;

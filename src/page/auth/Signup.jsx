@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import DefaultHeader from "../../components/header/DefaultHeader";
 import { API } from "../../config/api";
 import axios from "axios";
 import { ReactComponent as I_chk } from "../../asset/icon/I_chk.svg";
 import PopupBg from "../../components/common/PopupBg";
 import TermPopup from "../../components/common/TermPopup";
+import DetailHeader from "../../components/header/DetailHeader";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -41,12 +41,17 @@ export default function Signup() {
 
   return (
     <>
-      <DefaultHeader />
+      <DetailHeader />
+
       <SignupBox>
         <section className="innerSec">
+          <button className="logoBtn" onClick={() => navigate("/")}>
+            Diana's Class
+          </button>
+
           <ul className="inputList">
             <li>
-              <p className="key">Name</p>
+              <h4 className="key">Name</h4>
               <div className="value">
                 <input
                   value={username}
@@ -57,7 +62,7 @@ export default function Signup() {
             </li>
 
             <li>
-              <p className="key">Password</p>
+              <h4 className="key">Password</h4>
               <div className="value">
                 <input
                   type={"password"}
@@ -69,7 +74,7 @@ export default function Signup() {
             </li>
 
             <li>
-              <p className="key">Confirm Password</p>
+              <h4 className="key">Confirm Password</h4>
               <div className="value">
                 <input
                   type={"password"}
@@ -126,7 +131,7 @@ export default function Signup() {
       {termPopup && (
         <>
           <TermPopup off={setTermPopup} />
-          <PopupBg off={setTermPopup} />
+          <PopupBg off={setTermPopup} bg />
         </>
       )}
     </>
@@ -137,21 +142,32 @@ const SignupBox = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   height: 100%;
-  padding: 50px 20px 0;
+  padding: 100px 0 0;
+  color: #333;
   overflow-y: scroll;
 
   .innerSec {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 40px;
-    width: 100%;
+    padding: 0 20px;
+
+    .logoBtn {
+      display: flex;
+      align-items: center;
+      font-size: 28px;
+      font-weight: 600;
+      font-family: "Edu SA Beginner", cursive;
+      color: #fe6c46;
+    }
 
     .inputList {
       display: flex;
       flex-direction: column;
       gap: 24px;
+      width: 100%;
 
       li {
         display: flex;
@@ -159,8 +175,7 @@ const SignupBox = styled.main`
         gap: 10px;
 
         .key {
-          font-size: 16px;
-          font-weight: 500;
+          font-size: 14px;
           color: #7b849c;
         }
 
@@ -168,14 +183,14 @@ const SignupBox = styled.main`
           display: flex;
           align-items: center;
           min-height: 48px;
-          font-weight: 600;
-          background: #2a2f3b;
-          border: 2px solid #484d5a;
+          height: 48px;
+          font-weight: 500;
+          border: 1px solid #d2d2d7;
           border-radius: 8px;
           overflow: hidden;
 
           &:focus-within {
-            border-color: #7879f1;
+            border-color: #fe6c46;
           }
 
           input {
@@ -204,7 +219,7 @@ const SignupBox = styled.main`
             border-radius: 4px;
 
             &.on {
-              border-color: #1f5eff;
+              border-color: #fe6c46;
 
               svg {
                 opacity: 1;
@@ -219,13 +234,13 @@ const SignupBox = styled.main`
               transition: 0.8s;
 
               .fill {
-                fill: #1f5eff;
+                fill: #fe6c46;
               }
             }
           }
 
           .detailBtn {
-            color: #7879f1;
+            color: #fe6c46;
             text-decoration: underline;
           }
         }
@@ -251,19 +266,19 @@ const SignupBox = styled.main`
         font-size: 18px;
         font-weight: 500;
         color: #fff;
-        background: #7879f1;
+        background: #fe6c46;
         border-radius: 20px;
 
         &:disabled {
-          color: #7b849c;
-          background: #2a2f3b;
+          color: #fff;
+          background: #e6e6ea;
         }
       }
 
       .loginBtn {
         font-size: 14px;
-        font-weight: 600;
-        color: #7879f1;
+        font-weight: 500;
+        color: #fe6c46;
       }
     }
   }

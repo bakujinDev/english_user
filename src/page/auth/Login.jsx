@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import DetailHeader from "../../components/header/DetailHeader";
 import { API } from "../../config/api";
 
 export default function Login() {
@@ -36,12 +37,17 @@ export default function Login() {
 
   return (
     <>
-      <DefaultHeader />
+      <DetailHeader />
+
       <LoginBox onKeyDown={onKeyDown}>
         <section className="innerSec">
+          <button className="logoBtn" onClick={() => navigate("/")}>
+            Diana's Class
+          </button>
+
           <ul className="inputList">
             <li>
-              <p className="key">Name</p>
+              <h4 className="key">Name</h4>
               <div className="value">
                 <input
                   value={username}
@@ -52,7 +58,7 @@ export default function Login() {
             </li>
 
             <li>
-              <p className="key">Password</p>
+              <h4 className="key">Password</h4>
               <div className="value">
                 <input
                   type={"password"}
@@ -92,21 +98,32 @@ const LoginBox = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   height: 100%;
-  padding: 20px;
+  padding: 100px 0 0 0;
+  color: #333;
   overflow-y: scroll;
 
   .innerSec {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 40px;
-    width: 100%;
+    padding: 0 20px;
+
+    .logoBtn {
+      display: flex;
+      align-items: center;
+      font-size: 28px;
+      font-weight: 600;
+      font-family: "Edu SA Beginner", cursive;
+      color: #fe6c46;
+    }
 
     .inputList {
       display: flex;
       flex-direction: column;
       gap: 24px;
+      width: 100%;
 
       li {
         display: flex;
@@ -114,63 +131,28 @@ const LoginBox = styled.main`
         gap: 10px;
 
         .key {
-          font-size: 16px;
+          font-size: 14px;
           color: #7b849c;
         }
 
-        input {
-          width: 100%;
-          height: 48px;
-          padding: 0 12px;
-          font-weight: 600;
-          border: 2px solid #484d5a;
-          background: #2a2f3b;
-          border-radius: 8px;
-
-          &:focus-within {
-            border-color: #7879f1;
-          }
-        }
-
-        .autoBtn {
+        .value {
           display: flex;
           align-items: center;
-          gap: 8px;
-          color: #7b849c;
+          min-height: 48px;
+          height: 48px;
+          font-weight: 500;
+          border: 1px solid #d2d2d7;
+          border-radius: 8px;
+          overflow: hidden;
 
-          &.on {
-            color: #fff;
-
-            .chkBox {
-              border-color: #7879f1;
-
-              svg {
-                opacity: 1;
-              }
-            }
+          &:focus-within {
+            border-color: #fe6c46;
           }
 
-          .chkBox {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 20px;
-            height: 20px;
-            padding: 2px;
-            border: 1px solid #7b849c;
-            border-radius: 4px;
-
-            svg {
-              width: 100%;
-              height: 100%;
-              object-fit: contain;
-              opacity: 0;
-              transition: 0.8s;
-
-              .fill {
-                fill: #1f5eff;
-              }
-            }
+          input {
+            flex: 1;
+            height: 100%;
+            padding: 0 12px;
           }
         }
       }
@@ -195,19 +177,19 @@ const LoginBox = styled.main`
         font-size: 18px;
         font-weight: 500;
         color: #fff;
-        background: #7879f1;
+        background: #fe6c46;
         border-radius: 20px;
 
         &:disabled {
-          color: #7b849c;
-          background: #2a2f3b;
+          color: #fff;
+          background: #e6e6ea;
         }
       }
 
       .signupBtn {
         font-size: 14px;
-        font-weight: 600;
-        color: #7879f1;
+        font-weight: 500;
+        color: #fe6c46;
       }
     }
   }

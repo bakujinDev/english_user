@@ -2,10 +2,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import EventListener from "./components/common/EventListener";
 import GlobalStyle from "./components/common/globalStyle";
-import Auth from "./routers/Auth/Auth";
+import Auth from "./routers/Auth";
 import Class from "./routers/class/Class";
 import Laboratory from "./routers/laboratory/Laboratory";
-import Main from "./routers/Main";
+import Home from "./routers/Home";
 import Record from "./routers/Record/Record";
 import Word from "./routers/word/Word";
 import "react-datepicker/dist/react-datepicker.css";
@@ -58,7 +58,7 @@ export default function App() {
         )}
 
         <Routes>
-          <Route path="/" element={<Main />} />
+          <Route path="/" element={<Home />} />
           <Route path="/auth/*" element={<Auth />} />
           <Route path="/class/*" element={<Class />} />
           <Route path="/word/*" element={<Word />} />
@@ -71,8 +71,4 @@ export default function App() {
   );
 }
 
-const AppBox = styled.div`
-  height: 100vh;
-  color: #fff;
-  background: #22242a;
-`;
+const AppBox = styled.div``;
