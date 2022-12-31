@@ -8,15 +8,15 @@ export default function TermPopup({ off }) {
 
   return (
     <TermPopupBox>
-      <h1 className="title">Diana's Class 이용약관</h1>
+      <h1 className="title">Diana's English 이용약관</h1>
 
       <div className="termBox">
         <h3>제1조 (목적)</h3>
 
         <p>
-          이 약관은 Diana's Class(이하 "회사")가 웹 플랫폼을 통해 제공하는
-          Diana's Class 및 이와 관련된 제반 서비스의 이용과 관련하여 회원과 회사
-          간에 필요한 사항을 규정함을 목적으로 합니다.
+          이 약관은 Diana's English(이하 "회사")가 웹 플랫폼을 통해 제공하는
+          Diana's English 및 이와 관련된 제반 서비스의 이용과 관련하여 회원과
+          회사 간에 필요한 사항을 규정함을 목적으로 합니다.
         </p>
 
         <h3>제2조 (정의)</h3>
@@ -217,7 +217,7 @@ const TermPopupBox = styled.section`
   height: 64vh;
   max-height: 500px;
   padding: 30px 6px;
-  background: #fff;
+  background: #323741;
   border-radius: 20px;
   top: 50%;
   left: 50%;
@@ -239,6 +239,7 @@ const TermPopupBox = styled.section`
     font-size: 12px;
     line-height: 18px;
     white-space: pre-wrap;
+    color: #ddd;
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -307,7 +308,7 @@ const TermPopupBox = styled.section`
       font-size: 14px;
       font-weight: 600;
       color: #fff;
-      background: #fe6c46;
+      background: #7879f1;
       border-radius: 20px;
 
       &:disabled {

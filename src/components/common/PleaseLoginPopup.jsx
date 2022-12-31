@@ -37,6 +37,7 @@ const PleaseLoginPopupBox = styled.section`
   padding: 24px 20px;
   color: #7b849c;
   background: #2a2f3b;
+  border: 2px solid #484d5a;
 
   .explain {
     width: 240px;

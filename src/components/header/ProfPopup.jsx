@@ -22,11 +22,11 @@ const ProfPopupBox = styled.section`
   width: 140px;
   padding: 10px;
   border-radius: 8px;
-  background: rgba(250, 194, 19, 0.78);
-  top: 36px;
+  background: rgba(120, 121, 241, 0.78);
+  top: 50px;
   right: 0;
   position: absolute;
-  z-index: 60;
+  z-index: 6;
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
 

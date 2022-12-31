@@ -9,7 +9,7 @@ export default function MenuBarHeader({ off }) {
     <>
       <PmenuBarHeaderBox>
         <button className="logoBtn" onClick={() => navigate("/")}>
-          Diana's Class
+          Diana's English
         </button>
 
         <button className="exitBtn" onClick={() => off()}>
@@ -31,7 +31,7 @@ const PmenuBarHeaderBox = styled.header`
   right: 0;
   left: 0;
   position: fixed;
-  z-index: 60;
+  z-index: 6;
 
   .logoBtn {
     display: flex;

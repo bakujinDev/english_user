@@ -62,7 +62,7 @@ const PmenuBarBox = styled.aside`
   right: 0;
   bottom: 0;
   position: fixed;
-  z-index: 60;
+  z-index: 6;
   transition: 0.4s;
   transform: translate(100%, 0);
 

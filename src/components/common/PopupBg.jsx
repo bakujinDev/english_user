@@ -24,7 +24,7 @@ const PopupBgBox = styled.div`
   top: 0;
   left: 0;
   cursor: pointer;
-  z-index: 50;
+  z-index: 5;
 
   &.bg {
     background: rgba(0, 0, 0, 0.3);

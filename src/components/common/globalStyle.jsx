@@ -193,7 +193,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   button{
-    padding: 0;
     font-size: inherit;
     font-family: inherit;
     color: inherit;
@@ -231,7 +230,7 @@ const GlobalStyle = createGlobalStyle`
     top: 50%;
     left: 50%;
     position: fixed;
-    z-index: 60;
+    z-index: 6;
     transform: translate(-50%, -50%);
   }
 
@@ -254,7 +253,7 @@ const GlobalStyle = createGlobalStyle`
 
 
   .react-datepicker-popper{
-  z-index: 40;
+  z-index: 4;
 }
 
 .customPicker{
