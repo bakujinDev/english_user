@@ -54,11 +54,12 @@ const MainBox = styled.main`
   overflow-y: scroll;
 
   .innerBox {
-    padding: 20px 0 0;
+    padding: 20px 0;
 
     nav {
       display: flex;
       flex-wrap: wrap;
+      justify-content: space-around;
       gap: 10px;
 
       button {
@@ -67,9 +68,8 @@ const MainBox = styled.main`
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 8px;
+        gap: 2vw;
         min-width: calc(50% - 6px);
-        max-width: 50%;
         aspect-ratio: 1;
         color: #fff;
         text-transform: capitalize;
@@ -89,7 +89,7 @@ const MainBox = styled.main`
         }
 
         h1 {
-          font-size: 20px;
+          font-size: 4vw;
           font-weight: 500;
         }
       }

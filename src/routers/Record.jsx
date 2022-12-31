@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import PleaseLoginPopup from "../../components/common/PleaseLoginPopup";
-import PopupBg from "../../components/common/PopupBg";
-import { D_classList } from "../../data/D_class";
-import ClassIndex from "./ClassIndex";
+import PleaseLoginPopup from "../components/common/PleaseLoginPopup";
+import PopupBg from "../components/common/PopupBg";
+import Create from "../page/record/Create";
+import RecordIndex from "../page/record/RecordIndex";
 
-export default function Class() {
+export default function Record() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -18,12 +18,12 @@ export default function Class() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<ClassIndex />} />
+        <Route path="/" element={<RecordIndex />} />
+        <Route path="/:id" element={<RecordIndex />} />
 
-        {D_classList.map((v, i) => (
-          <Route key={i} path={v.url} element={v.comp} />
-        ))}
+        <Route path="/create" element={<Create />} />
       </Routes>
+
       {pleaseLoginPopup && (
         <>
           <PleaseLoginPopup off={setPleaseLoginPopup} />

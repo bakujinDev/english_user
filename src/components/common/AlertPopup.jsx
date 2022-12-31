@@ -17,14 +17,18 @@ const AlertPopupBox = styled.section`
   flex-direction: column;
   align-items: center;
   gap: 32px;
-  width: 300px;
+  max-width: 360px;
+  width: 90vw;
   padding: 24px 20px;
+  color: #7b849c;
+  background: #2a2f3b;
+  border: 2px solid #484d5a;
 
   .cont {
   }
 
   .confirmBtn {
-    width: 80px;
+    width: 80%;
     height: 40px;
 
     color: #fff;

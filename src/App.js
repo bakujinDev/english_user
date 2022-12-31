@@ -2,14 +2,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import EventListener from "./components/common/EventListener";
 import GlobalStyle from "./components/common/globalStyle";
-import Auth from "./routers/Auth/Auth";
-import Class from "./routers/class/Class";
-import Laboratory from "./routers/laboratory/Laboratory";
-import Main from "./routers/Main";
-import Record from "./routers/Record/Record";
-import Word from "./routers/word/Word";
+import Auth from "./routers/Auth";
+import Class from "./routers/Class";
+import Main from "./page/Main";
+import Record from "./routers/Record";
+import Word from "./routers/Word";
 import "react-datepicker/dist/react-datepicker.css";
-import Help from "./routers/Help/Help";
+import Help from "./routers/Help";
 import { useEffect } from "react";
 import { useState } from "react";
 import TermPopup from "./components/common/TermPopup";
@@ -64,7 +63,6 @@ export default function App() {
           <Route path="/word/*" element={<Word />} />
           <Route path="/record/*" element={<Record />} />
           <Route path="/help/*" element={<Help />} />
-          <Route path="/laboratory/*" element={<Laboratory />} />
         </Routes>
       </BrowserRouter>
     </AppBox>

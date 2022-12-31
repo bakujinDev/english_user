@@ -163,6 +163,7 @@ const GlobalStyle = createGlobalStyle`
 
     &::placeholder{
       color:#D0D0D0;
+      opacity: 0.4;
     }
     
     &::-webkit-outer-spin-button,
@@ -176,9 +177,11 @@ const GlobalStyle = createGlobalStyle`
     font-size: inherit;
     font-family: inherit;
     color: inherit;
+    border-radius: inherit;
     
     &::placeholder{
       color:#D0D0D0;
+      opacity: 0.4;
     }
   }
 
@@ -204,10 +207,6 @@ const GlobalStyle = createGlobalStyle`
   textarea{
     resize: none;
     user-select:auto;
-  }
-
-  &#BroadBox {
-    background: #373737;
   }
 
   .nospace{

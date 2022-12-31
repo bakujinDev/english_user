@@ -1,9 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-export default function PleaseLoginPopup() {
-  const navigate = useNavigate();
-
+export default function PleaseLoginPopup({ off }) {
   return (
     <PleaseLoginPopupBox className="defaultPopup">
       <p className="explain">
@@ -15,11 +12,11 @@ export default function PleaseLoginPopup() {
       </p>
 
       <div className="btnBox">
-        <button className="confirmBtn" onClick={() => navigate("/auth/login")}>
+        <button className="confirmBtn" onClick={() => off()}>
           OK
         </button>
 
-        <button className="cancelBtn" onClick={() => navigate("/")}>
+        <button className="cancelBtn" onClick={() => off()}>
           Dont mind
         </button>
       </div>

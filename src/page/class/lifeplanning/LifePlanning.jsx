@@ -216,7 +216,15 @@ export default function LifeChart() {
               ))}
             </ul>
 
-            <button className="submitBtn" onClick={onClickSubmitBtn}>
+            <button
+              className="submitBtn"
+              disabled={
+                !postData.filter((e) => {
+                  return e.x && e.y;
+                }).length
+              }
+              onClick={onClickSubmitBtn}
+            >
               Submit
             </button>
           </article>
@@ -250,6 +258,7 @@ const LifeChartBox = styled.main`
 
       .chartCont {
         height: 100vw;
+        max-height: 600px;
         overflow-x: scroll;
 
         &::-webkit-scrollbar {
@@ -372,13 +381,18 @@ const LifeChartBox = styled.main`
       }
 
       .submitBtn {
-        width: 120px;
+        width: 100%;
         height: 50px;
         margin: 20px 0 0;
         color: #fff;
         font-weight: 500;
         background: #7879f1;
         border-radius: 8px;
+
+        &:disabled {
+          color: #7b849c;
+          background: #2a2f3b;
+        }
       }
     }
   }

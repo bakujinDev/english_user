@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
-import WordDetail from "./WordDetail";
+import WordDetail from "../page/word/WordDetail";
 
-import WordIndex from "./WordIndex";
+import WordIndex from "../page/word/WordIndex";
 
 export default function Word() {
   return (
