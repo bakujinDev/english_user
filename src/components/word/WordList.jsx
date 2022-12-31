@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import I_speaker from "../../asset/icon/I_speaker.svg";
+import { ReactComponent as I_x } from "../../asset/icon/I_x.svg";
 
 export default function WordList({ listData }) {
-  const locData = JSON.parse(localStorage.getItem("delWord"));
-
+  const [delWordList, setDelWordList] = useState(
+    JSON.parse(localStorage.getItem(listData.name))
+  );
+  const [wordList, setWordList] = useState(listData.data);
   const [disVisbleKey, setDisVisbleKey] = useState(false);
   const [disVisbleVal, setDisVisbleVal] = useState(false);
 
-  useEffect(() => {
-    // if (locData) setDelList(locData);
-  }, []);
+  console.log(listData);
+  console.log(wordList);
 
   async function onClickSpeak(text) {
     window.responsiveVoice.enableEstimationTimeout = false;
@@ -18,21 +20,22 @@ export default function WordList({ listData }) {
   }
 
   function onClickDelBtn(id) {
-    // let delArray = [];
-    // if (locData) delArray = locData;
-    // if (delArray.indexOf(id) === -1) {
-    //   delArray.push(id);
-    //   localStorage.setItem("delWord", JSON.stringify(delArray));
-    //   setDelList([...delArray]);
-    // }
+    let _delWordList = delWordList;
+
+    if (_delWordList.indexOf(id) === -1) {
+      _delWordList.push(id);
+      localStorage.setItem("delWord", JSON.stringify(delWordList));
+
+      setDelWordList([..._delWordList]);
+    }
   }
 
   return (
     <PwordListBox>
       <ul className="wordList">
-        {listData.map(
+        {wordList.map(
           (v, i) =>
-            listData?.indexOf(v.id) === -1 && (
+            wordList.indexOf(v.id) === -1 && (
               <li key={i}>
                 <div className="contBox">
                   <div className="keyBox">
@@ -59,12 +62,12 @@ export default function WordList({ listData }) {
                   </button>
                 </div>
 
-                {/* <button
+                <button
                   className={`delBtn`}
                   onClick={() => onClickDelBtn(v.id)}
                 >
                   <I_x />
-                </button> */}
+                </button>
               </li>
             )
         )}
@@ -137,8 +140,8 @@ const PwordListBox = styled.section`
           width: 14px;
           height: 14px;
 
-          .stroke {
-            stroke: #666;
+          .fill {
+            fill: #666;
           }
         }
       }

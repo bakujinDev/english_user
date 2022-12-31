@@ -1,17 +1,18 @@
 import styled from "styled-components";
 import DetailHeader from "../../components/header/DetailHeader";
-import I_rtArw from "../../asset/icon/I_rtArw.svg";
+import { ReactComponent as I_rtArw } from "../../asset/icon/I_rtArw.svg";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { API } from "../../config/api";
 import axios from "axios";
+import { D_weeklyWordList } from "../../data/D_word";
 
 export default function WordIndex() {
   const navigate = useNavigate();
 
   const [listData, setListData] = useState([]);
 
-  useEffect(() => {
+  function getData() {
     axios
       .get(`${API.DATA_LIST}/weekly_word/10/0`)
       .then(({ data }) => {
@@ -19,6 +20,10 @@ export default function WordIndex() {
         setListData(data.resData.dbData);
       })
       .catch((err) => console.error(err));
+  }
+
+  useEffect(() => {
+    // getData();
   }, []);
 
   return (
@@ -27,12 +32,12 @@ export default function WordIndex() {
 
       <WordIndexBox>
         <nav className="navList">
-          {listData.map((v, i) => (
-            <button key={i} onClick={() => navigate(`${v.id + 1}`)}>
+          {D_weeklyWordList.map((v, i) => (
+            <li key={i} onClick={() => navigate(`${v.id + 1}`)}>
               <p>{v.name}</p>
 
-              <img src={I_rtArw} alt="" />
-            </button>
+              <I_rtArw />
+            </li>
           ))}
         </nav>
       </WordIndexBox>
@@ -42,19 +47,28 @@ export default function WordIndex() {
 
 const WordIndexBox = styled.main`
   padding: 50px 0 0;
-  
+
   .navList {
-    button {
+    li {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 100%;
       height: 50px;
       padding: 0 20px;
-      font-size: 18px;
-      font-weight: 500;
-      color: #7b849c;
       border-bottom: 1px solid #353c49;
+      cursor: pointer;
+
+      p {
+        font-size: 18px;
+        font-weight: 500;
+        color: #7b849c;
+      }
+
+      svg {
+        .fill {
+          fill: #7b849c;
+        }
+      }
     }
   }
 `;

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import DetailHeader from "../../components/header/DetailHeader";
 import WordList from "../../components/word/WordList";
 import { API } from "../../config/api";
+import { D_weeklyWordList } from "../../data/D_word";
 
 export default function WordDetail() {
   const param = useParams();
@@ -24,8 +25,15 @@ export default function WordDetail() {
       .catch((err) => console.error(err));
   }
 
+  function getDummy() {
+    let _data = D_weeklyWordList[param.id];
+    setTitle(_data.name);
+    setListData(_data.data);
+  }
+
   useEffect(() => {
-    getData();
+    // getData();
+    getDummy();
   }, []);
 
   return (
