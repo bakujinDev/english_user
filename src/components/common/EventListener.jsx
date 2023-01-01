@@ -22,21 +22,6 @@ export default function EventListener() {
       });
   }
 
-  function getColorScheme() {
-    let _darkMode = localStorage.getItem("darkMode");
-
-    if (
-      !_darkMode &&
-      window?.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      localStorage.setItem("darkMode", "true");
-    }
-  }
-
-  useLayoutEffect(() => {
-    getColorScheme();
-  }, []);
-
   useEffect(() => {
     window.scrollTo(0, 0);
     axios.defaults.headers.Authorization = `Bearer ${token}`;

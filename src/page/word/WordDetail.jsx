@@ -11,24 +11,20 @@ export default function WordDetail() {
   const param = useParams();
 
   const [category, setCategory] = useState(false);
-  const [title, setTitle] = useState("");
-  const [listData, setListData] = useState([]);
+  const [wordObj, setWordObj] = useState([]);
 
   function getData() {
     axios
       .get(`${API.WORD_DETDATA}/weekly_word/${param.id - 1}`)
       .then(({ data }) => {
         console.log(data);
-        setTitle(data.resData.name);
-        setListData(data.resData.value);
+        setWordObj(data.resData);
       })
       .catch((err) => console.error(err));
   }
 
   function getDummy() {
-    let _data = D_weeklyWordList[param.id];
-    setTitle(_data.name);
-    setListData(_data.data);
+    setWordObj(D_weeklyWordList[param.id]);
   }
 
   useEffect(() => {
@@ -38,13 +34,12 @@ export default function WordDetail() {
 
   return (
     <>
-      <DetailHeader title={title} />
+      <DetailHeader title={wordObj.name} />
 
       <WordDetailBox>
         <section className="topBar">
           <button
-            disabled
-            className={`${category && "on"} toggleBtn`}
+            className={`${category && "btnOn"} toggleBtn`}
             onClick={() => setCategory(!category)}
           >
             <p className="on">del</p>
@@ -53,11 +48,7 @@ export default function WordDetail() {
           </button>
         </section>
 
-        {category ? (
-          <WordList listData={listData} />
-        ) : (
-          <WordList listData={listData} />
-        )}
+        <WordList category={category} wordObj={wordObj} />
       </WordDetailBox>
     </>
   );
@@ -92,7 +83,7 @@ const WordDetailBox = styled.main`
       background: #484d5a;
       position: relative;
 
-      &.on {
+      &.btnOn {
         background: #7879f1;
 
         span {
@@ -113,8 +104,8 @@ const WordDetailBox = styled.main`
       }
 
       p {
-        font-weight: 600;
-        color: rgba(0, 0, 0, 0.4);
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.6);
         position: absolute;
         transition: 0.4s;
 

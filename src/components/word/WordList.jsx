@@ -1,20 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import I_speaker from "../../asset/icon/I_speaker.svg";
 import { ReactComponent as I_x } from "../../asset/icon/I_x.svg";
 
-export default function WordList({ listData }) {
-  const [delWordList, setDelWordList] = useState(
-    JSON.parse(localStorage.getItem(listData.name))
-  );
-  const [wordList, setWordList] = useState(listData.data);
+export default function WordList({ category, wordObj }) {
+  const [delWordList, setDelWordList] = useState([]);
   const [disVisbleKey, setDisVisbleKey] = useState(false);
   const [disVisbleVal, setDisVisbleVal] = useState(false);
 
-  console.log(listData);
-  console.log(wordList);
+  async function getDelWordListByStorage() {
+    let _delWordList = await JSON.parse(localStorage.getItem(wordObj.name));
 
-  async function onClickSpeak(text) {
+    if (_delWordList) setDelWordList([..._delWordList]);
+  }
+
+  function onClickSpeak(text) {
     window.responsiveVoice.enableEstimationTimeout = false;
     window.responsiveVoice.speak(text);
   }
@@ -22,54 +23,93 @@ export default function WordList({ listData }) {
   function onClickDelBtn(id) {
     let _delWordList = delWordList;
 
-    if (_delWordList.indexOf(id) === -1) {
-      _delWordList.push(id);
-      localStorage.setItem("delWord", JSON.stringify(delWordList));
+    if (_delWordList.includes(id))
+      _delWordList = _delWordList.filter((v) => v !== id);
+    else _delWordList.push(id);
 
-      setDelWordList([..._delWordList]);
-    }
+    setDelWordList([..._delWordList]);
+    localStorage.setItem(wordObj.name, JSON.stringify(_delWordList));
   }
+
+  useEffect(() => {
+    getDelWordListByStorage();
+  }, [localStorage.getItem(wordObj.name)]);
 
   return (
     <PwordListBox>
       <ul className="wordList">
-        {wordList.map(
-          (v, i) =>
-            wordList.indexOf(v.id) === -1 && (
-              <li key={i}>
-                <div className="contBox">
-                  <div className="keyBox">
-                    <button
-                      className={`${disVisbleKey && "disVisble"} key textBtn`}
-                      onClick={() => setDisVisbleKey(!disVisbleKey)}
-                    >
-                      <p>{v.word}</p>
-                    </button>
+        {wordObj.value?.map((v, i) =>
+          category
+            ? delWordList?.includes(v.id) && (
+                <li key={i}>
+                  <div className="contBox">
+                    <div className="keyBox">
+                      <button
+                        className={`${disVisbleKey && "disVisble"} key textBtn`}
+                        onClick={() => setDisVisbleKey(!disVisbleKey)}
+                      >
+                        <p>{v.word}</p>
+                      </button>
+
+                      <button
+                        className="speakBtn"
+                        onClick={() => onClickSpeak(v.word)}
+                      >
+                        <img src={I_speaker} alt="" />
+                      </button>
+                    </div>
 
                     <button
-                      className="speakBtn"
-                      onClick={() => onClickSpeak(v.word)}
+                      className={`${disVisbleVal && "disVisble"} value textBtn`}
+                      onClick={() => setDisVisbleVal(!disVisbleVal)}
                     >
-                      <img src={I_speaker} alt="" />
+                      <p>{v.meaning}</p>
                     </button>
                   </div>
 
                   <button
-                    className={`${disVisbleVal && "disVisble"} value textBtn`}
-                    onClick={() => setDisVisbleVal(!disVisbleVal)}
+                    className={`delBtn`}
+                    onClick={() => onClickDelBtn(v.id)}
                   >
-                    <p>{v.meaning}</p>
+                    <I_x />
                   </button>
-                </div>
+                </li>
+              )
+            : !delWordList?.includes(v.id) && (
+                <li key={i}>
+                  <div className="contBox">
+                    <div className="keyBox">
+                      <button
+                        className={`${disVisbleKey && "disVisble"} key textBtn`}
+                        onClick={() => setDisVisbleKey(!disVisbleKey)}
+                      >
+                        <p>{v.word}</p>
+                      </button>
 
-                <button
-                  className={`delBtn`}
-                  onClick={() => onClickDelBtn(v.id)}
-                >
-                  <I_x />
-                </button>
-              </li>
-            )
+                      <button
+                        className="speakBtn"
+                        onClick={() => onClickSpeak(v.word)}
+                      >
+                        <img src={I_speaker} alt="" />
+                      </button>
+                    </div>
+
+                    <button
+                      className={`${disVisbleVal && "disVisble"} value textBtn`}
+                      onClick={() => setDisVisbleVal(!disVisbleVal)}
+                    >
+                      <p>{v.meaning}</p>
+                    </button>
+                  </div>
+
+                  <button
+                    className={`delBtn`}
+                    onClick={() => onClickDelBtn(v.id)}
+                  >
+                    <I_x />
+                  </button>
+                </li>
+              )
         )}
       </ul>
     </PwordListBox>

@@ -120,6 +120,6 @@ export const D_0703 = [
 ];
 
 export const D_weeklyWordList = [
-  { name: "July 3th", id: 0, data: D_0703 },
-  { name: "July 2th", id: 1, data: D_0702 },
+  { name: "July 3th", id: 0, value: D_0703 },
+  { name: "July 2th", id: 1, value: D_0702 },
 ];
