@@ -9,19 +9,24 @@ import { API } from "../../config/api";
 import WaveSurfer from "wavesurfer.js";
 import ReactDatePicker from "react-datepicker";
 import { CustomHeader, CustomInput } from "../../util/CustomDatePicker";
-import { ReactComponent as I_pause } from "../../asset/icon/I_pause.svg";
-import { ReactComponent as I_play } from "../../asset/icon/I_play.svg";
+import { ReactComponent as I_PAUSE } from "../../asset/icon/I_pause.svg";
+import { ReactComponent as I_PLAY } from "../../asset/icon/I_play.svg";
 
 export default function RecordIndex() {
   const navigate = useNavigate();
   const weekNum = 6;
+  const initWaveSurferList = new Array(weekNum).fill(new Array(1));
 
   const [listData, setListData] = useState([]);
-  const [waveSurferList, setWaveSurferList] = useState(
-    Array.from(Array(weekNum), () => new Array(1))
-  );
+  const [waveSurferList, setWaveSurferList] = useState(initWaveSurferList);
   const [targetDate, setTargetDate] = useState(new Date());
   const [dataWeek, setDataWeek] = useState([]);
+
+  function initData() {
+    setListData([]);
+    waveSurferList.map((e) => e && e.map((detV) => detV.destroy()));
+    setWaveSurferList(initWaveSurferList);
+  }
 
   function markUpWave({ monthI, i, audioUrl }) {
     let _waveBox = document.getElementById(`waveBox${monthI}_${i}`);
@@ -120,16 +125,13 @@ export default function RecordIndex() {
   }, []);
 
   useEffect(() => {
-    setListData([]);
-    waveSurferList.map((e) => e && e.map((detV) => detV.destroy()));
-    setWaveSurferList(Array.from(Array(weekNum), () => new Array(1)));
-  }, [targetDate]);
-
-  useEffect(() => {
+    initData();
     getList();
   }, [targetDate]);
 
   useEffect(() => {
+    if (!waveSurferList.filter((e) => e[0]).length) return;
+
     let _interval = setInterval(getAudioQuery, 500);
 
     return () => clearInterval(_interval);
@@ -197,9 +199,9 @@ export default function RecordIndex() {
                                   onClick={() => onClickActionBtn(monthI, i)}
                                 >
                                   {waveSurferList[monthI][i]?.isPlaying() ? (
-                                    <I_pause />
+                                    <I_PAUSE />
                                   ) : (
-                                    <I_play />
+                                    <I_PLAY />
                                   )}
                                 </button>
 
@@ -235,7 +237,7 @@ export default function RecordIndex() {
           </article>
         </section>
 
-        <nav className={`recordBtn`} onClick={() => navigate("create")}>
+        <nav className="recordBtn" onClick={() => navigate("create")}>
           <img src={I_mikeWhite} alt="" />
         </nav>
       </RecordIndexBox>
@@ -427,6 +429,7 @@ const RecordIndexBox = styled.main`
     bottom: 0;
     left: 0;
     position: fixed;
+    cursor: pointer;
 
     img {
       height: 100%;

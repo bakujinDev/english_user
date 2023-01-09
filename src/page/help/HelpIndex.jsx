@@ -1,14 +1,11 @@
 import styled from "styled-components";
 import DetailHeader from "../../components/header/DetailHeader";
-import { useNavigate } from "react-router-dom";
 import I_rtArw from "../../asset/icon/I_rtArw.svg";
 import { useState } from "react";
 import PopupBg from "../../components/common/PopupBg";
 import TermPopup from "../../components/common/TermPopup";
 
 export default function HelpIndex() {
-  const navigate = useNavigate();
-
   const [termPopup, setTermPopup] = useState(false);
 
   return (

@@ -19,17 +19,19 @@ export default function Signup() {
   const [termPopup, setTermPopup] = useState(false);
 
   function onClickSignupBtn() {
-    axios
-      .post(API.SIGNUP, { username, pw })
-      .then(({ data }) => {
-        console.log(data);
-        localStorage.setItem("token", data.token);
-        navigate("/");
-      })
-      .catch((err) => {
-        console.error(err.response.data.message);
-        setAlarm(err.response.data.message);
-      });
+    localStorage.setItem("token", "token");
+    navigate("/");
+    // axios
+    //   .post(API.SIGNUP, { username, pw })
+    //   .then(({ data }) => {
+    //     console.log(data);
+    //     localStorage.setItem("token", data.token);
+    //     navigate("/");
+    //   })
+    //   .catch((err) => {
+    //     console.error(err.response.data.message);
+    //     setAlarm(err.response.data.message);
+    //   });
   }
 
   useEffect(() => {

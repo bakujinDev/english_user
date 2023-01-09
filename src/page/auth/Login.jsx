@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import axios from "axios";
 import { API } from "../../config/api";
 
 export default function Login() {
@@ -17,17 +17,20 @@ export default function Login() {
   }
 
   function onClickLoginBtn() {
-    axios
-      .post(API.LOGIN, { username, pw })
-      .then(({ data }) => {
-        console.log(data);
-        localStorage.setItem("token", data.token);
-        navigate("/");
-      })
-      .catch((err) => {
-        console.error(err.response.data.message);
-        setAlarm(err.response.data.message);
-      });
+    localStorage.setItem("token", "token");
+    navigate("/");
+
+    // axios
+    //   .post(API.LOGIN, { username, pw })
+    //   .then(({ data }) => {
+    //     console.log(data);
+    //     localStorage.setItem("token", data.token);
+    //     navigate("/");
+    //   })
+    //   .catch((err) => {
+    //     console.error(err.response.data.message);
+    //     setAlarm(err.response.data.message);
+    //   });
   }
 
   useEffect(() => {

@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import DetailHeader from "../../components/header/DetailHeader";
 import I_mikeWhite from "../../asset/icon/I_mikeWhite.svg";
-import { ReactComponent as I_import } from "../../asset/icon/I_import.svg";
-import { ReactComponent as I_x } from "../../asset/icon/I_x.svg";
-import { ReactComponent as I_play } from "../../asset/icon/I_play.svg";
-import { ReactComponent as I_pause } from "../../asset/icon/I_pause.svg";
+import { ReactComponent as I_IMPORT } from "../../asset/icon/I_import.svg";
+import { ReactComponent as I_X } from "../../asset/icon/I_x.svg";
+import { ReactComponent as I_PLAY } from "../../asset/icon/I_play.svg";
+import { ReactComponent as I_PAUSE } from "../../asset/icon/I_pause.svg";
 import WaveSurfer from "wavesurfer.js";
 import axios from "axios";
 import { API } from "../../config/api";
@@ -15,10 +15,11 @@ import { useNavigate } from "react-router-dom";
 import LoadingBar from "../../components/common/LoadingBar";
 
 export default function Create() {
-  const importInputRef = useRef();
-  const waveRef = useRef();
+  const importInputRef = useRef(null);
+  const waveRef = useRef(null);
   const recordTimeRef = useRef(0);
   const timeInterval = useRef(null);
+
   const navigate = useNavigate();
 
   const [recorder, setRecorder] = useState("");
@@ -68,6 +69,8 @@ export default function Create() {
 
   function onClickActionBtn() {
     waveRef.current.playPause();
+
+    getAudioQuery();
   }
 
   /**
@@ -135,37 +138,41 @@ export default function Create() {
 
     waveSurfer.on("ready", () => {
       waveRef.current = waveSurfer;
+      setWaveStatus({ ...waveRef.current });
     });
   }
 
   function onClickSubmitBtn() {
-    setUploadBusy(true);
+    setAlertPopup("Submit Complete");
 
-    axios
-      .post(API.RECORD, {
-        data: audioUrl.data,
-      })
-      .then((res) => {
-        console.log(res);
-        setAlertPopup("Submit Complete");
-        setUploadBusy(false);
-      })
-      .catch(console.error);
+    // axios
+    //   .post(API.RECORD, {
+    //     data: audioUrl.data,
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //     setAlertPopup("Submit Complete");
+    //     setUploadBusy(false);
+    //   })
+    //   .catch(console.error);
   }
 
   function onClickDelBtn() {
+    let _waveBox = document.getElementById(`waveBox`);
+    while (_waveBox.hasChildNodes()) _waveBox.removeChild(_waveBox.firstChild);
+
     waveRef.current.destroy();
-    setAudioUrl("");
+    waveRef.current = null;
+
     setWaveStatus("");
+    setAudioUrl("");
     setOnRecord(false);
     recordTimeRef.current = 0;
     setRecordTime(0);
   }
 
   useEffect(() => {
-    return () => {
-      sessionStorage.setItem("reload", true);
-    };
+    return () => sessionStorage.setItem("reload", true);
   }, []);
 
   useEffect(() => {
@@ -180,7 +187,7 @@ export default function Create() {
 
     return () => {
       if (timeInterval.current) {
-        clearInterval(clearInterval(timeInterval.current));
+        clearInterval(timeInterval.current);
         timeInterval.current = null;
       }
     };
@@ -211,24 +218,18 @@ export default function Create() {
   }, [audioUrl]);
 
   useEffect(() => {
-    if (!waveRef) return;
+    if (!waveRef.current || !waveStatus.isPlaying) return;
 
     let _interval = setInterval(getAudioQuery, 500);
 
-    return () => {
-      clearInterval(_interval);
-    };
-  }, [waveRef]);
+    return () => clearInterval(_interval);
+  }, [waveStatus]);
 
   useEffect(() => {
     if (!loader) return;
 
-    setTimeout(() => {
-      setLoader(false);
-    }, 2000);
+    setTimeout(() => setLoader(false), 2000);
   }, [loader]);
-
-  console.log(recordTimeRef.current);
 
   return (
     <>
@@ -241,7 +242,7 @@ export default function Create() {
               className="importBtn"
               onClick={() => importInputRef.current.click()}
             >
-              <I_import />
+              <I_IMPORT />
 
               <input
                 ref={importInputRef}
@@ -280,7 +281,7 @@ export default function Create() {
           {audioUrl ? (
             <>
               <button className={`playPauseBtn`} onClick={onClickActionBtn}>
-                {waveStatus && waveStatus?.isPlaying ? <I_pause /> : <I_play />}
+                {waveStatus && waveStatus?.isPlaying ? <I_PAUSE /> : <I_PLAY />}
               </button>
 
               <button
@@ -292,7 +293,7 @@ export default function Create() {
               </button>
 
               <button className="delBtn" onClick={onClickDelBtn}>
-                <I_x />
+                <I_X />
               </button>
             </>
           ) : (
@@ -436,9 +437,11 @@ const CreateBox = styled.main`
       padding: 8px;
       background: #7b849c;
       border-radius: 50%;
+      overflow: hidden;
 
       svg {
         width: 14px;
+        height: 18px;
 
         .fill {
           fill: #ccc;
